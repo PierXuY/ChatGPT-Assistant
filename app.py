@@ -14,7 +14,7 @@ st.set_page_config(page_title='ChatGPT Assistant', layout='wide', page_icon='ðŸ¤
 st.markdown("""
     <style>
     div.css-1vq4p4l.e1fqkh3o4 {
-        padding-top: 3rem !important;
+        padding-top: 2rem !important;
         }
     .avatar {
         display: flex;
