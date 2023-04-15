@@ -19,7 +19,7 @@ gpt_svg = """
 """
 # 内容背景
 user_background_color = '#ffffff'
-gpt_background_color = '#f9fafb'
+gpt_background_color = '#f0f2f6'
 # 聊天记录文件夹名称
 history_chats_filename = 'chat_history'
 
