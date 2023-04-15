@@ -6,7 +6,7 @@ import pandas as pd
 import openai
 from requests.models import ChunkedEncodingError
 
-st.set_page_config(page_title='ChatGPT助手', layout='wide')
+st.set_page_config(page_title='ChatGPT Assistant', layout='wide')
 # 自定义元素样式
 # 第一个是减少侧边栏顶部空白，不同版本的st存在区别（此处适用1.19.0）
 st.markdown("""
@@ -68,7 +68,7 @@ if "initial_settings" not in st.session_state:
 
 with st.sidebar:
     # 此处href与下文的st.header内容相对应，跳转锚点
-    st.markdown("<a href='#gpt-assistant' id='chat-window'>🤖 聊天窗口</a>", unsafe_allow_html=True)
+    st.markdown("<a href='#chatgpt-assistant' id='chat-window'>🤖 聊天窗口</a>", unsafe_allow_html=True)
     current_chat = st.radio(
         label='历史聊天窗口',
         format_func=lambda x: x.split('_')[0] if '_' in x else x,
@@ -150,7 +150,7 @@ area_gpt_content = st.empty()
 area_error = st.empty()
 
 st.write("\n")
-st.header('GPT Assistant')
+st.header('ChatGPT Assistant')
 tap_input, tap_context, tap_set = st.tabs(['💬 聊天', '🗒️ 预设', '⚙️ 设置'])
 
 with tap_context:
