@@ -273,7 +273,7 @@ with tap_input:
                                                  **paras_need_input)
             except (FileNotFoundError, KeyError):
                 area_error.error("缺失 OpenAI API Key，请在复制项目后配置Secrets，详情见[项目仓库]("
-                                 "https://github.com/PierXuY/ChatGPT-Assistant)")
+                                 "https://github.com/PierXuY/ChatGPT-Assistant)。")
             except openai.error.AuthenticationError:
                 area_error.error("无效的 OpenAI API Key。")
             except openai.error.APIConnectionError as e:
