@@ -238,8 +238,7 @@ with tap_input:
 
 
     st.text_area("**输入：**", key="user_input_area", on_change=user_input_area_callback,
-                 help="点击侧边栏标题可直接跳转此输入区   \n"
-                      "此功能目前在Hugging Face不可用")
+                 help="点击侧边栏标题可直接跳转此输入区")
     if st.session_state['user_input_content'].strip() != '':
         st.session_state['pre_user_input_content'] = st.session_state['user_input_content']
         st.session_state['user_input_content'] = ''
