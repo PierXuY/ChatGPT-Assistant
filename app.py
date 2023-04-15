@@ -202,8 +202,13 @@ with tap_input:
         df_input = df_input[-level * 2:]
         res = pd.concat([df_system, df_input], ignore_index=True).to_dict('records')
         return res
+    
+    
+    def remove_hashtag_space(text):
+        res = re.sub(r"(#+)\s*", r"\1", text)
+        return res
 
-
+    
     def extract_chars(text, num):
         char_num = 0
         chars = ''
@@ -221,7 +226,7 @@ with tap_input:
 
     def user_input_area_callback():
         # 清空输入框
-        st.session_state['user_input_content'] = st.session_state['user_input_area']
+        st.session_state['user_input_content'] = remove_hashtag_space(st.session_state['user_input_area'])
         st.session_state['user_input_area'] = ''
 
         # 修改窗口名称
