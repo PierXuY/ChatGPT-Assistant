@@ -19,7 +19,8 @@ git clone https://github.com/PierXuY/ChatGPT-Assistant.git
 pip install -r requirements.txt
 ```
 
-4. 设置API Key
+4. 设置API Key   
+
 在 `./.streamlit/secrets.toml`文件中写入`apikey = "你的Openai Key"`
 
 5. 启动应用
