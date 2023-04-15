@@ -10,4 +10,4 @@
 # 说明
 # 致谢
 - 最早是基于[shan-mx/ChatGPT_Streamlit](https://github.com/shan-mx/ChatGPT_Streamlit)项目进行的改造，感谢。
-- [预设的上下文话术](https://github.com/PierXuY/Streamlit-ChatGPT-Assistant/blob/main/set_context.py)参考自[binary-husky/chatgpt_academic](https://github.com/binary-husky/chatgpt_academic)项目和[f/awesome-chatgpt-prompts]https://github.com/f/awesome-chatgpt-prompts项目，感谢。
+- [预设的上下文话术](https://github.com/PierXuY/Streamlit-ChatGPT-Assistant/blob/main/set_context.py)参考自[binary-husky/chatgpt_academic](https://github.com/binary-husky/chatgpt_academic)项目和[f/awesome-chatgpt-prompts](https://github.com/f/awesome-chatgpt-prompts)项目，感谢。
