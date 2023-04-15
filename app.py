@@ -264,7 +264,7 @@ with tap_input:
                 openai.api_key = st.secrets["apikey"]
                 r = openai.ChatCompletion.create(model="gpt-3.5-turbo", messages=history_need_input, stream=True,
                                                  **paras_need_input)
-            except (FileNotFoundError or KeyError):
+            except (FileNotFoundError, KeyError):
                 area_error.error("缺失 OpenAI API Key，请在st.secrets中完成配置。")
             except openai.error.AuthenticationError:
                 area_error.error("无效的 OpenAI API Key。")
