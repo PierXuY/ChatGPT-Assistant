@@ -68,7 +68,7 @@ if "initial_settings" not in st.session_state:
 
 with st.sidebar:
     # 此处href与下文的st.header内容相对应，跳转锚点
-    st.header("🤖 聊天窗口")
+    st.markdown("# 🤖 聊天窗口")
     current_chat = st.radio(
         label='历史聊天窗口',
         format_func=lambda x: x.split('_')[0] if '_' in x else x,
