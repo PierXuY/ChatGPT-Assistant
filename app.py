@@ -68,7 +68,7 @@ if "initial_settings" not in st.session_state:
 
 with st.sidebar:
     # 此处href与下文的st.header内容相对应，跳转锚点
-    st.markdown("🤖 聊天窗口")
+    st.header("🤖 聊天窗口")
     current_chat = st.radio(
         label='历史聊天窗口',
         format_func=lambda x: x.split('_')[0] if '_' in x else x,
@@ -246,8 +246,7 @@ with tap_input:
             write_data(new_name)
 
 
-    st.text_area("**输入：**", key="user_input_area", on_change=user_input_area_callback,
-                 help="点击侧边栏标题可直接跳转此输入区")
+    st.text_area("**输入：**", key="user_input_area", on_change=user_input_area_callback)
     if st.session_state['user_input_content'].strip() != '':
         st.session_state['pre_user_input_content'] = st.session_state['user_input_content']
         st.session_state['user_input_content'] = ''
