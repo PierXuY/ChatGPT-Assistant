@@ -7,7 +7,7 @@ import openai
 import re
 from requests.models import ChunkedEncodingError
 
-st.set_page_config(page_title='ChatGPT Assistant', layout='wide')
+st.set_page_config(page_title='ChatGPT Assistant', layout='wide', page_icon='🤖')
 # 自定义元素样式
 # 第一个是减少侧边栏顶部空白，不同版本的st存在区别（此处适用1.19.0）
 st.markdown("""
@@ -172,9 +172,9 @@ with tap_set:
 
     st.button("清空聊天记录", use_container_width=True, on_click=clear_button_callback)
 
-    st.caption("包含上下文次数：")
+    st.caption("包含对话次数：")
     st.slider("Context Level", 1, 10, st.session_state['context_level' + current_chat], 1, on_change=write_data,
-              key='context_level' + current_chat, help="表示包含在每次会话中的历史对话次数，预设内容不计算在内。")
+              key='context_level' + current_chat, help="表示每次会话包含的对话次数，预设内容不计算在内。")
 
     st.caption("模型参数：")
     st.slider("Temperature", 0.0, 2.0, st.session_state["temperature" + current_chat], 0.1,
