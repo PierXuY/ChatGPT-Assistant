@@ -46,10 +46,8 @@ st.markdown("""
         margin : 2px;
     } 
     #chat-window{
-        color: black;
         padding: 10px 0px;
         text-decoration: none;
-        font-size: 25px;
     }
     #chat-window:hover{
         color: blue;
@@ -70,7 +68,7 @@ if "initial_settings" not in st.session_state:
 
 with st.sidebar:
     # 此处href与下文的st.header内容相对应，跳转锚点
-    st.markdown("<a href='#chatgpt-assistant' id='chat-window'>🤖 聊天窗口</a>", unsafe_allow_html=True)
+    st.markdown("🤖 聊天窗口")
     current_chat = st.radio(
         label='历史聊天窗口',
         format_func=lambda x: x.split('_')[0] if '_' in x else x,
@@ -110,6 +108,10 @@ with st.sidebar:
                                    on_click=create_chat_button_callback)
     delete_chat_button = c2.button('删除', use_container_width=True, key='delete_chat_button',
                                    on_click=delete_chat_button_callback)
+    
+    st.write("\n")
+    st.write("\n")
+    st.markdown("<a href='#chatgpt-assistant' id='chat-window'>⬇️ 直达输入区</a>",unsafe_allow_html=True)
 
 # 加载数据
 if ("history" + current_chat not in st.session_state) or (st.session_state['if_chat_change']):
