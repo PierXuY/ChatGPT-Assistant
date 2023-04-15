@@ -36,7 +36,7 @@ streamlit run app.py
 
 # 说明
 - 在[helper.py](https://github.com/PierXuY/ChatGPT-Assistant/blob/main/helper.py)文件中可自定义用户名和SVG格式[头像](https://www.dicebear.com/playground?style=identicon)。
-- 在自己部署的项目中编辑[set_context.py文件](https://github.com/PierXuY/ChatGPT-Assistant/blob/main/set_context.py)，即可增加预设定的上下文选项，会自动同步到应用中。
+- 在自己部署的项目中编辑[set_context.py](https://github.com/PierXuY/ChatGPT-Assistant/blob/main/set_context.py)，即可增加预设定的上下文选项，会自动同步到应用中。
 - 在Streamlit Cloud平台可以免费部署，且无须科学上网即可使用。
 
 
