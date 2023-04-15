@@ -7,22 +7,22 @@
 
 # 部署
 ## 本地部署
-1.建立虚拟环境（建议）
+**1. 建立虚拟环境（建议）**
 
-2.复制项目
+**2. 复制项目**
 ```bash
 git clone https://github.com/PierXuY/ChatGPT-Assistant.git
 ```
 
-3.安装依赖
+**3. 安装依赖**
 ```bash
 pip install -r requirements.txt
 ```
 
-4.设置API Key
+**4. 设置API Key**
 在 `./.streamlit/secrets.toml`文件中写入`apikey = "你的Openai Key"`
 
-5.启动应用
+**5. 启动应用**
 ```bash
 streamlit run app.py
 ```
