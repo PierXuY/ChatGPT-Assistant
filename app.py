@@ -8,6 +8,7 @@ import re
 from requests.models import ChunkedEncodingError
 
 st.set_page_config(page_title='ChatGPT Assistant', layout='wide', page_icon='🤖')
+st.write(st.__version__)
 # 自定义元素样式
 # 第一个是减少侧边栏顶部空白，不同版本的st存在区别（此处适用1.19.0）
 st.markdown("""
