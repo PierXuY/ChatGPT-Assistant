@@ -21,7 +21,7 @@ pip install -r requirements.txt
 
 4. 设置API Key   
 
-- 在 `./.streamlit/secrets.toml`文件中写入`apikey = "Your Openai Key"`
+- 在 `.streamlit/secrets.toml`文件中写入`apikey = "Your Openai Key"`
 
 5. 启动应用
 ```bash
