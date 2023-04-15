@@ -4,6 +4,7 @@ import uuid
 import copy
 import pandas as pd
 import openai
+import re
 from requests.models import ChunkedEncodingError
 
 st.set_page_config(page_title='ChatGPT Assistant', layout='wide')
