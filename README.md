@@ -29,7 +29,7 @@ streamlit run app.py
 ```
 
 ## Streamlit Cloud部署（推荐）
-1. 可以直接复制已部署的[Streamlit Cloud项目](https://pearxuy-gpt.streamlit.app/)，或者在`fork`本项目后[参考官方教程](https://docs.streamlit.io/streamlit-community-cloud/get-started)进行部署。   
+1. 可以直接复制已部署的[Streamlit Cloud项目](https://pearxuy-gpt.streamlit.app/)，或者在`Fork`本项目后[参考官方教程](https://docs.streamlit.io/streamlit-community-cloud/get-started)进行部署。   
 2. 部署完成后，在Streamlit Cloud的Secrets中配置Openai Key，参考下图：
 ![配置Secrets](https://github.com/PierXuY/ChatGPT-Assistant/blob/main/secrets.png)
 
