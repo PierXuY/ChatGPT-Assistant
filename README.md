@@ -5,7 +5,7 @@
 - 预设聊天上下文 
 - 模型参数调节
 
-🤩[项目示例](https://pearxuy-gpt.streamlit.app/)   
+🤩 [项目示例](https://pearxuy-gpt.streamlit.app/)   
 
 - 可在网页的设置选项中配置Openai Key，此时不会留存历史对话，仅在用户当前会话有效，他人不会共享。
 - 在Secrtes中配置Openai Key后，将留存历史对话记录，此时需设置为私人应用，打造为个人GPT助理。    
@@ -49,4 +49,4 @@ streamlit run app.py
 
 # 致谢
 - 最早是基于[shan-mx/ChatGPT_Streamlit](https://github.com/shan-mx/ChatGPT_Streamlit)项目进行的改造，感谢。
-- [预设的上下文话术](https://github.com/PierXuY/ChatGPT-Assistant/blob/main/set_context.py)参考自[binary-husky/chatgpt_academic](https://github.com/binary-husky/chatgpt_academic)项目和[f/awesome-chatgpt-prompts](https://github.com/f/awesome-chatgpt-prompts)项目，感谢。
+- 预设的[上下文功能](https://github.com/PierXuY/ChatGPT-Assistant/blob/main/set_context.py)参考自[binary-husky/chatgpt_academic](https://github.com/binary-husky/chatgpt_academic)项目和[f/awesome-chatgpt-prompts](https://github.com/f/awesome-chatgpt-prompts)项目，感谢。
