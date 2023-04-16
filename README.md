@@ -38,7 +38,7 @@ streamlit run app.py
 轻松免费部署，且无须科学上网即可使用，注意设置为私人应用。
 1. `Fork`本项目后[参考官方教程](https://docs.streamlit.io/streamlit-community-cloud/get-started)进行部署。   
 2. 部署完成后，在Streamlit Cloud的Secrets中配置Openai Key，参考下图：
-<img src="https://github.com/PierXuY/ChatGPT-Assistant/blob/main/secrets.png" alt="配置Secrets" width="600" height="450">
+<img src="https://github.com/PierXuY/ChatGPT-Assistant/blob/main/secrets.png" alt="配置Secrets" width="600" height="240">
 
 
 # 说明
