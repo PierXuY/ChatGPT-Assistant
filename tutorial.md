@@ -6,7 +6,7 @@
 
 ![image-20230416202656455](https://github.com/PierXuY/ChatGPT-Assistant/blob/main/Figure/step2.png)
 
-# 注册Steamlit后准备部署
+# 注册Streamlit后准备部署
 
 ![image-20230416202739308](https://github.com/PierXuY/ChatGPT-Assistant/blob/main/Figure/step3.png)
 
