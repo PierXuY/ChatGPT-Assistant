@@ -176,7 +176,7 @@ with tap_set:
     st.button("清空聊天记录", use_container_width=True, on_click=clear_button_callback)
     st.markdown("OpenAI API Key (可选)")
     st.text_input("OpenAI API Key (可选)", type='password', key='apikey_input', label_visibility='collapsed')
-    st.caption("- 此Key仅在当前网页有效，且优先级高于Secrets中的配置，仅自己可用，他人无法共享。")
+    st.caption("此Key仅在当前网页有效，且优先级高于Secrets中的配置，仅自己可用，他人无法共享。")
 
     st.markdown("包含历史对话次数：")
     st.slider("包含历史对话次数：", 0, 10, st.session_state['context_level' + current_chat], 1, on_change=write_data,
