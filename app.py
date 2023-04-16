@@ -252,9 +252,9 @@ with tap_input:
         st.session_state['user_input_content'] = ''
         show_each_message(st.session_state['pre_user_input_content'], 'user',
                           [area_user_svg.markdown, area_user_content.markdown])
+        context_level_tem = st.session_state['context_level' + current_chat]
         history_tem = get_history_input(st.session_state["history" + current_chat], context_level_tem) + \
                       [{"role": "user", "content": st.session_state['pre_user_input_content'].replace('\n', '\n\n')}]
-        context_level_tem = st.session_state['context_level' + current_chat]
         history_need_input = ([{"role": "system",
                                 "content": set_context_all[st.session_state['context_select' + current_chat]]}]
                               + [{"role": "system",
