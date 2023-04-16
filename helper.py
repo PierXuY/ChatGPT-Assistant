@@ -27,7 +27,7 @@ initial_content_history = [{"role": 'system',
                             "content": '当你的回复中涉及代码块时，请在markdown语法中标明语言类型。如果不涉及，请忽略这句话。'}]
 initial_content_all = {"history": initial_content_history,
                        "paras": {
-                           "temperature": 0.9,
+                           "temperature": 1,
                            "top_p": 1.0,
                            "presence_penalty": 0.0,
                            "frequency_penalty": 0.0,
