@@ -5,10 +5,14 @@
 - 预设聊天上下文 
 - 模型参数调节
 
-[项目示例](https://pearxuy-gpt.streamlit.app/)
-⚠️
-可在网页的设置选项中配置Openai Key，此时将不会留存历史对话记录，此Key仅在用户当前会话有效，他人不会共享，且Key也不会保存。
-在Secrtes中配置Openai Key后，将留存历史对话记录，此时需设置为私人项目，作为个人GPT助理。
+[项目示例](https://pearxuy-gpt.streamlit.app/)   
+
+⚠️   
+
+- 可在网页的设置选项中配置Openai Key，此时不会留存历史对话，仅在用户当前会话有效，他人不会共享。
+- 在Secrtes中配置Openai Key后，将留存历史对话记录，此时需设置为私人应用，作为个人GPT助理。    
+  
+详情见下文。
 
 # 部署
 ## 本地部署
