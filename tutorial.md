@@ -6,13 +6,13 @@
 
 ![image-20230416202656455](https://github.com/PierXuY/ChatGPT-Assistant/blob/main/Figure/step2.png)
 
-# 注册Steamlit
+# 注册Steamlit后准备部署
 
 ![image-20230416202739308](https://github.com/PierXuY/ChatGPT-Assistant/blob/main/Figure/step3.png)
 
 ![image-20230416202759591](https://github.com/PierXuY/ChatGPT-Assistant/blob/main/Figure/step4.png)
 
-# 粘贴app.py链接地址
+# 粘贴app.py链接地址，开始部署
 
 ![image-20230416202819141](https://github.com/PierXuY/ChatGPT-Assistant/blob/main/Figure/step5.png)
 
