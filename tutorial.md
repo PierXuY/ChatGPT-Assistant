@@ -1,24 +1,24 @@
 # Fork到个人Github仓库
 
-![image-20230416202413647](https://github.com/PierXuY/ChatGPT-Assistant/blob/main/Figure/step1.png)
+![step1.png](https://pic4.58cdn.com.cn/nowater/webim/big/n_v21131a9eb2dbf4ee3b0b729c258984936.png)
 
 # 复制个人仓库app.py链接地址
 
-![image-20230416202656455](https://github.com/PierXuY/ChatGPT-Assistant/blob/main/Figure/step2.png)
+![step2.png](https://pic6.58cdn.com.cn/nowater/webim/big/n_v23e9e6b07092043bd8e19a447a73d21c4.png)
 
 # 注册Streamlit后准备部署
 
-![image-20230416202739308](https://github.com/PierXuY/ChatGPT-Assistant/blob/main/Figure/step3.png)
+![step3.png](https://pic2.58cdn.com.cn/nowater/webim/big/n_v25c3903d3f4f347f9a7d72ddcc1d358ff.png)
 
-![image-20230416202759591](https://github.com/PierXuY/ChatGPT-Assistant/blob/main/Figure/step4.png)
+![step4.png](https://pic8.58cdn.com.cn/nowater/webim/big/n_v2a12f9042e3ae44679bae099063e759b0.png)
 
 # 粘贴app.py链接地址，开始部署
 
-![image-20230416202819141](https://github.com/PierXuY/ChatGPT-Assistant/blob/main/Figure/step5.png)
+![step5.png](https://pic8.58cdn.com.cn/nowater/webim/big/n_v21488d9af3b8c43b58dd2c593559116f9.png)
 
-![image-20230416202841463](https://github.com/PierXuY/ChatGPT-Assistant/blob/main/Figure/step6.png)
+![step6.png](https://pic6.58cdn.com.cn/nowater/webim/big/n_v20a4f09e01261465d95e1617b932bd8ea.png)
 
-![image-20230416202857253](https://github.com/PierXuY/ChatGPT-Assistant/blob/main/Figure/step7.png)
+![step7.png](https://pic5.58cdn.com.cn/nowater/webim/big/n_v281d6d918a7264e4b8134ddc154ea9a08.png)
 
 
 
