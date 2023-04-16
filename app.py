@@ -175,9 +175,9 @@ with tap_set:
 
     st.button("清空聊天记录", use_container_width=True, on_click=clear_button_callback)
 
-    st.caption("包含对话次数：")
-    st.slider("Context Level", 1, 10, st.session_state['context_level' + current_chat], 1, on_change=write_data,
-              key='context_level' + current_chat, help="表示每次会话包含的对话次数，预设内容不计算在内。")
+    st.caption("包含历史对话次数：")
+    st.slider("Context Level", 0, 10, st.session_state['context_level' + current_chat], 1, on_change=write_data,
+              key='context_level' + current_chat, help="表示每次会话中包含的历史对话次数，预设内容不计算在内。")
 
     st.caption("模型参数：")
     st.slider("Temperature", 0.0, 2.0, st.session_state["temperature" + current_chat], 0.1,
@@ -252,14 +252,14 @@ with tap_input:
         st.session_state['user_input_content'] = ''
         show_each_message(st.session_state['pre_user_input_content'], 'user',
                           [area_user_svg.markdown, area_user_content.markdown])
-        history_tem = st.session_state["history" + current_chat] + \
+        history_tem = get_history_input(st.session_state["history" + current_chat], context_level_tem) + \
                       [{"role": "user", "content": st.session_state['pre_user_input_content'].replace('\n', '\n\n')}]
         context_level_tem = st.session_state['context_level' + current_chat]
         history_need_input = ([{"role": "system",
                                 "content": set_context_all[st.session_state['context_select' + current_chat]]}]
                               + [{"role": "system",
                                   "content": st.session_state['context_input' + current_chat]}]
-                              + get_history_input(history_tem, context_level_tem))
+                              + history_tem)
         paras_need_input = {
             "temperature": st.session_state["temperature" + current_chat],
             "top_p": st.session_state["top_p" + current_chat],
