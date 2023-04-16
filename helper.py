@@ -1,8 +1,13 @@
 import json
-import streamlit as st
 import os
-from set_context import set_context
+import builtins
+import shutil
 import uuid
+from functools import wraps
+
+import streamlit as st
+
+from set_context import set_context
 
 set_context_all = {"不设置": ""}
 set_context_all.update(set_context)
@@ -20,9 +25,7 @@ gpt_svg = """
 # 内容背景
 user_background_color = '#ffffff'
 gpt_background_color = '#f0f2f6'
-# 聊天记录文件夹名称
-history_chats_filename = 'chat_history'
-
+# 模型初始设置
 initial_content_history = [{"role": 'system',
                             "content": '当你的回复中涉及代码块时，请在markdown语法中标明语言类型。如果不涉及，请忽略这句话。'}]
 initial_content_all = {"history": initial_content_history,
@@ -40,13 +43,47 @@ initial_content_all = {"history": initial_content_history,
                        }
 
 
-def get_history_chats(file_name=history_chats_filename):
+# 聊天记录处理
+def clear_folder(path):
+    if not os.path.exists(path):
+        return
+    for file_name in os.listdir(path):
+        file_path = os.path.join(path, file_name)
+        try:
+            shutil.rmtree(file_path)
+        except Exception:
+            pass
+
+
+def set_chats_path():
+    save_path = 'chat_history'
+    if 'apikey' not in st.secrets:
+        clear_folder('tem_files')
+        save_path = 'tem_files/tem_chat' + str(uuid.uuid4())
+    return save_path
+
+
+# 重新open函数，路径不存在时自动创建
+def create_path(func):
+    @wraps(func)
+    def wrapper(path, *args, **kwargs):
+        if not os.path.exists(os.path.dirname(path)):
+            os.makedirs(os.path.dirname(path))
+        return func(path, *args, **kwargs)
+
+    return wrapper
+
+
+open = create_path(builtins.open)
+
+
+def get_history_chats(path):
     try:
-        os.mkdir(file_name)
+        os.makedirs(path)
     except FileExistsError:
         pass
-    files = [f for f in os.listdir(f'./{file_name}') if f.endswith('.json')]
-    files_with_time = [(f, os.stat(f'./{file_name}/' + f).st_ctime) for f in files]
+    files = [f for f in os.listdir(f'./{path}') if f.endswith('.json')]
+    files_with_time = [(f, os.stat(f'./{path}/' + f).st_ctime) for f in files]
     sorted_files = sorted(files_with_time, key=lambda x: x[1], reverse=True)
     chat_names = [os.path.splitext(f[0])[0] for f in sorted_files]
     if len(chat_names) == 0:
@@ -54,22 +91,25 @@ def get_history_chats(file_name=history_chats_filename):
     return chat_names
 
 
-def save_data(current_chat: str, history: list, paras: dict, contexts: dict, **kwargs):
-    with open(f"./{history_chats_filename}/{current_chat}.json", 'w', encoding='utf-8') as f:
+def save_data(path: str, file_name: str, history: list, paras: dict, contexts: dict, **kwargs):
+    with open(f"./{path}/{file_name}.json", 'w', encoding='utf-8') as f:
         json.dump({"history": history, "paras": paras, "contexts": contexts, **kwargs}, f)
 
 
-def remove_data(current_chat: str):
-    os.remove(f"./{history_chats_filename}/{current_chat}.json")
-
-
-def load_data(current_chat: str) -> dict:
+def remove_data(path: str, file_name: str):
     try:
-        with open(f"./{history_chats_filename}/{current_chat}.json", 'r', encoding='utf-8') as f:
+        os.remove(f"./{path}/{file_name}.json")
+    except FileNotFoundError:
+        pass
+
+
+def load_data(path: str, file_name: str) -> dict:
+    try:
+        with open(f"./{path}/{file_name}.json", 'r', encoding='utf-8') as f:
             data = json.load(f)
             return data
     except FileNotFoundError:
-        with open(f"./{history_chats_filename}/{current_chat}.json", 'w', encoding='utf-8') as f:
+        with open(f"./{path}/{file_name}.json", 'w', encoding='utf-8') as f:
             f.write(json.dumps(initial_content_all))
         return initial_content_all
 

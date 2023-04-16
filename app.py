@@ -56,7 +56,8 @@ st.markdown("""
 """, unsafe_allow_html=True)
 if "initial_settings" not in st.session_state:
     # 历史聊天窗口
-    st.session_state['history_chats'] = get_history_chats()
+    st.session_state["path"] = set_chats_path()
+    st.session_state['history_chats'] = get_history_chats(st.session_state["path"])
     # ss参数初始化
     st.session_state['pre_chat'] = None
     st.session_state['if_chat_change'] = False
@@ -100,7 +101,7 @@ with st.sidebar:
         else:
             st.session_state["current_chat_index"] = 0
         st.session_state['history_chats'].remove(current_chat)
-        remove_data(current_chat)
+        remove_data(st.session_state["path"], current_chat)
 
 
     c1, c2 = st.columns(2)
@@ -108,14 +109,14 @@ with st.sidebar:
                                    on_click=create_chat_button_callback)
     delete_chat_button = c2.button('删除', use_container_width=True, key='delete_chat_button',
                                    on_click=delete_chat_button_callback)
-    
+
     st.write("\n")
     st.write("\n")
-    st.markdown("<a href='#chatgpt-assistant' id='chat-window'>⬇️ 直达输入区</a>",unsafe_allow_html=True)
+    st.markdown("<a href='#chatgpt-assistant' id='chat-window'>➡️ 直达输入区</a>",unsafe_allow_html=True)
 
 # 加载数据
 if ("history" + current_chat not in st.session_state) or (st.session_state['if_chat_change']):
-    for key, value in load_data(current_chat).items():
+    for key, value in load_data(st.session_state["path"], current_chat).items():
         if key == 'history':
             st.session_state[key + current_chat] = value
         else:
@@ -140,8 +141,8 @@ def write_data(new_chat_name=current_chat):
         "context_input": st.session_state["context_input" + current_chat],
         "context_level": st.session_state["context_level" + current_chat],
     }
-    save_data(new_chat_name, st.session_state["history" + current_chat], st.session_state["paras"],
-              st.session_state["contexts"])
+    save_data(st.session_state["path"], new_chat_name, st.session_state["history" + current_chat],
+              st.session_state["paras"], st.session_state["contexts"])
 
 
 # 输入内容展示
@@ -172,14 +173,17 @@ with tap_set:
         st.session_state['history' + current_chat] = copy.deepcopy(initial_content_history)
         write_data()
 
-
     st.button("清空聊天记录", use_container_width=True, on_click=clear_button_callback)
+    st.markdown("OpenAI API Key (可选)")
+    st.text_input("OpenAI API Key (可选)", type='password', key='apikey_input', label_visibility='collapsed')
+    st.caption("- 此Key仅在当前网页有效，且优先级高于Secrets中的配置，仅自己可用，他人无法共享。")
 
-    st.caption("包含历史对话次数：")
-    st.slider("Context Level", 0, 10, st.session_state['context_level' + current_chat], 1, on_change=write_data,
-              key='context_level' + current_chat, help="表示每次会话中包含的历史对话次数，预设内容不计算在内。")
+    st.markdown("包含历史对话次数：")
+    st.slider("包含历史对话次数：", 0, 10, st.session_state['context_level' + current_chat], 1, on_change=write_data,
+              key='context_level' + current_chat, help="表示每次会话中包含的历史对话次数，预设内容不计算在内。",
+              label_visibility='collapsed')
 
-    st.caption("模型参数：")
+    st.markdown("模型参数：")
     st.slider("Temperature", 0.0, 2.0, st.session_state["temperature" + current_chat], 0.1,
               help="""在0和2之间，应该使用什么样的采样温度？较高的值（如0.8）会使输出更随机，而较低的值（如0.2）则会使其更加集中和确定性。
               我们一般建议只更改这个参数或top_p参数中的一个，而不要同时更改两个。""",
@@ -206,13 +210,13 @@ with tap_input:
         df_input = df_input[-level * 2:]
         res = pd.concat([df_system, df_input], ignore_index=True).to_dict('records')
         return res
-    
-    
+
+
     def remove_hashtag_space(text):
         res = re.sub(r"(#+)\s*", r"\1", text)
         return res
 
-    
+
     def extract_chars(text, num):
         char_num = 0
         chars = ''
@@ -230,14 +234,15 @@ with tap_input:
 
     def user_input_area_callback():
         # 清空输入框
-        st.session_state['user_input_content'] = remove_hashtag_space(st.session_state['user_input_area'])
+        st.session_state['user_input_content'] = (remove_hashtag_space(st.session_state['user_input_area'])
+                                                  .replace('\n', '\n\n'))
         st.session_state['user_input_area'] = ''
 
         # 修改窗口名称
         user_input_content = st.session_state['user_input_content']
         df_history = pd.DataFrame(st.session_state["history" + current_chat])
         if len(df_history.query('role!="system"')) == 0:
-            remove_data(current_chat)
+            remove_data(st.session_state["path"], current_chat)
             current_chat_index = st.session_state['history_chats'].index(current_chat)
             new_name = extract_chars(user_input_content, 18) + '_' + str(uuid.uuid4())
             st.session_state['history_chats'][current_chat_index] = new_name
@@ -254,7 +259,7 @@ with tap_input:
                           [area_user_svg.markdown, area_user_content.markdown])
         context_level_tem = st.session_state['context_level' + current_chat]
         history_tem = get_history_input(st.session_state["history" + current_chat], context_level_tem) + \
-                      [{"role": "user", "content": st.session_state['pre_user_input_content'].replace('\n', '\n\n')}]
+                      [{"role": "user", "content": st.session_state['pre_user_input_content']}]
         history_need_input = ([{"role": "system",
                                 "content": set_context_all[st.session_state['context_select' + current_chat]]}]
                               + [{"role": "system",
@@ -268,12 +273,15 @@ with tap_input:
         }
         with st.spinner("🤔"):
             try:
-                openai.api_key = st.secrets["apikey"]
+                if apikey := st.session_state['apikey_input']:
+                    openai.api_key = apikey
+                else:
+                    openai.api_key = st.secrets["apikey"]
                 r = openai.ChatCompletion.create(model="gpt-3.5-turbo", messages=history_need_input, stream=True,
                                                  **paras_need_input)
             except (FileNotFoundError, KeyError):
-                area_error.error("缺失 OpenAI API Key，请在复制项目后配置Secrets，详情见[项目仓库]("
-                                 "https://github.com/PierXuY/ChatGPT-Assistant)。")
+                area_error.error("缺失 OpenAI API Key，请在复制项目后配置Secrets，或者在设置中进行临时配置。"
+                                 "详情见[项目仓库](https://github.com/PierXuY/ChatGPT-Assistant)。")
             except openai.error.AuthenticationError:
                 area_error.error("无效的 OpenAI API Key。")
             except openai.error.APIConnectionError as e:
