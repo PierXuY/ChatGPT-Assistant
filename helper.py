@@ -35,7 +35,7 @@ initial_content_all = {"history": initial_content_history,
                        "contexts": {
                            'context_select': '不设置',
                            'context_input': '',
-                           'context_level': 6
+                           'context_level': 4
                        }
                        }
 
