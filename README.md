@@ -39,8 +39,8 @@ streamlit run app.py
 1. `Fork`本项目后[参考官方教程](https://docs.streamlit.io/streamlit-community-cloud/get-started)进行部署。   
 2. 部署完成后，在Streamlit Cloud的Secrets中配置Openai Key，参考下图：
 <div style="display: flex; flex-wrap: wrap;">
-  <img src="[https://example.com/image1.jpg](https://github.com/PierXuY/ChatGPT-Assistant/blob/main/Figure/advanced-setting.png)" alt="advanced-setting" style="flex: 1; width: 50%;">
-  <img src="[https://example.com/image2.jpg](https://github.com/PierXuY/ChatGPT-Assistant/blob/main/Figure/set-apikey.png)" alt="set-apikey" style="flex: 1; width: 50%;">
+  <img src="https://github.com/PierXuY/ChatGPT-Assistant/blob/main/Figure/advanced-setting.png" alt="advanced-setting" style="flex: 1; width: 50%;">
+  <img src="https://github.com/PierXuY/ChatGPT-Assistant/blob/main/Figure/set-apikey.png" alt="set-apikey" style="flex: 1; width: 50%;">
 </div>
 
 # 说明
