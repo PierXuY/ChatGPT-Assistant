@@ -178,7 +178,7 @@ with tap_set:
     st.text_input("OpenAI API Key (可选)", type='password', key='apikey_input', label_visibility='collapsed')
     st.caption("此Key仅在当前网页有效，且优先级高于Secrets中的配置，仅自己可用，他人无法共享。")
 
-    st.markdown("包含历史对话次数：")
+    st.markdown("包含对话次数：")
     st.slider("Context Level", 0, 10, st.session_state['context_level' + current_chat], 1, on_change=write_data,
               key='context_level' + current_chat, help="表示每次会话中包含的历史对话次数，预设内容不计算在内。")
 
