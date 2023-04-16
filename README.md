@@ -36,12 +36,12 @@ streamlit run app.py
 
 ## Streamlit Cloud部署（推荐）
 轻松免费部署，且无须科学上网即可使用，注意设置为私人应用。
-1. `Fork`本项目到个人Github仓库。
-2. 注册[Streamlit Cloud账号](https://share.streamlit.io/)，并连接到Github。
-3. 开始部署应用，具体可参考[官方教程](https://docs.streamlit.io/streamlit-community-cloud/get-started)。   
-4. 在应用的的Secrets中配置Openai Key，具体格式参考下图：
-<img src="https://github.com/PierXuY/ChatGPT-Assistant/blob/main/secrets.png" alt="配置Secrets" width="600">
-
+1. `Fork`本项目后[参考官方教程](https://docs.streamlit.io/streamlit-community-cloud/get-started)进行部署。   
+2. 部署完成后，在Streamlit Cloud的Secrets中配置Openai Key，参考下图：
+<div style="display: flex; flex-wrap: wrap;">
+  <img src="[https://example.com/image1.jpg](https://github.com/PierXuY/ChatGPT-Assistant/blob/main/Figure/advanced-setting.png)" alt="advanced-setting" style="flex: 1; width: 50%;">
+  <img src="[https://example.com/image2.jpg](https://github.com/PierXuY/ChatGPT-Assistant/blob/main/Figure/set-apikey.png)" alt="set-apikey" style="flex: 1; width: 50%;">
+</div>
 
 # 说明
 - 在[helper.py](https://github.com/PierXuY/ChatGPT-Assistant/blob/main/helper.py)文件中可自定义用户名和SVG格式[头像](https://www.dicebear.com/playground?style=identicon)。
