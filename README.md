@@ -4,6 +4,7 @@
 - 历史对话留存
 - 预设聊天上下文 
 - 模型参数调节
+- 对话导出为PDF文件
 
 🤩 [项目示例](https://pearxuy-gpt.streamlit.app/)   
 
@@ -43,7 +44,8 @@ streamlit run app.py
 <div style="display: flex;">
   <img src="https://github.com/PierXuY/ChatGPT-Assistant/blob/main/Figure/advanced-setting.png" alt="advanced-setting" style="flex: 1; width: 450px;">
   <img src="https://github.com/PierXuY/ChatGPT-Assistant/blob/main/Figure/set-apikey.png" alt="set-apikey" style="flex: 1; width: 450px;">
-</div>
+</div>   
+也可以在部署完成后再进行配置。
 
 # 说明
 - 在[helper.py](https://github.com/PierXuY/ChatGPT-Assistant/blob/main/helper.py)文件中可自定义用户名和SVG格式[头像](https://www.dicebear.com/playground?style=identicon)。
