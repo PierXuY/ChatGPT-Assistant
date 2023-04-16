@@ -121,7 +121,7 @@ if ("history" + current_chat not in st.session_state) or (st.session_state['if_c
             st.session_state[key + current_chat] = value
         else:
             for k, v in value.items():
-                st.session_state[k + current_chat] = v
+                st.session_state[k + current_chat + 'default'] = v
     st.session_state['if_chat_change'] = False
 
 # 对话展示
@@ -160,12 +160,12 @@ tap_input, tap_context, tap_set = st.tabs(['💬 聊天', '🗒️ 预设', '⚙
 
 with tap_context:
     set_context_list = list(set_context_all.keys())
-    context_select_index = set_context_list.index(st.session_state['context_select' + current_chat])
+    context_select_index = set_context_list.index(st.session_state['context_select' + current_chat + "default"])
     st.selectbox(label='选择上下文', options=set_context_list, key='context_select' + current_chat,
                  index=context_select_index, on_change=write_data)
     st.caption(set_context_all[st.session_state['context_select' + current_chat]])
     st.text_area(label='补充或自定义上下文：', key="context_input" + current_chat,
-                 value=st.session_state['context_input' + current_chat],
+                 value=st.session_state['context_input' + current_chat + "default"],
                  on_change=write_data)
 
 with tap_set:
@@ -174,29 +174,30 @@ with tap_set:
         write_data()
 
     st.button("清空聊天记录", use_container_width=True, on_click=clear_button_callback)
+
     st.markdown("OpenAI API Key (可选)")
     st.text_input("OpenAI API Key (可选)", type='password', key='apikey_input', label_visibility='collapsed')
     st.caption("此Key仅在当前网页有效，且优先级高于Secrets中的配置，仅自己可用，他人无法共享。")
 
     st.markdown("包含对话次数：")
-    st.slider("Context Level", 0, 10, st.session_state['context_level' + current_chat], 1, on_change=write_data,
+    st.slider("Context Level", 0, 10, st.session_state['context_level' + current_chat + "default"], 1, on_change=write_data,
               key='context_level' + current_chat, help="表示每次会话中包含的历史对话次数，预设内容不计算在内。")
 
     st.markdown("模型参数：")
-    st.slider("Temperature", 0.0, 2.0, st.session_state["temperature" + current_chat], 0.1,
+    st.slider("Temperature", 0.0, 2.0, st.session_state["temperature" + current_chat + "default"], 0.1,
               help="""在0和2之间，应该使用什么样的采样温度？较高的值（如0.8）会使输出更随机，而较低的值（如0.2）则会使其更加集中和确定性。
               我们一般建议只更改这个参数或top_p参数中的一个，而不要同时更改两个。""",
               on_change=write_data, key='temperature' + current_chat)
-    st.slider("Top P", 0.1, 1.0, st.session_state["top_p" + current_chat], 0.1,
+    st.slider("Top P", 0.1, 1.0, st.session_state["top_p" + current_chat + "default"], 0.1,
               help="""一种替代采用温度进行采样的方法，称为“基于核心概率”的采样。在该方法中，模型会考虑概率最高的top_p个标记的预测结果。
               因此，当该参数为0.1时，只有包括前10%概率质量的标记将被考虑。我们一般建议只更改这个参数或采样温度参数中的一个，而不要同时更改两个。""",
               on_change=write_data, key='top_p' + current_chat)
     st.slider("Presence Penalty", -2.0, 2.0,
-              st.session_state["presence_penalty" + current_chat], 0.1,
+              st.session_state["presence_penalty" + current_chat + "default"], 0.1,
               help="""该参数的取值范围为-2.0到2.0。正值会根据新标记是否出现在当前生成的文本中对其进行惩罚，从而增加模型谈论新话题的可能性。""",
               on_change=write_data, key='presence_penalty' + current_chat)
     st.slider("Frequency Penalty", -2.0, 2.0,
-              st.session_state["frequency_penalty" + current_chat], 0.1,
+              st.session_state["frequency_penalty" + current_chat + "default"], 0.1,
               help="""该参数的取值范围为-2.0到2.0。正值会根据新标记在当前生成的文本中的已有频率对其进行惩罚，从而减少模型直接重复相同语句的可能性。""",
               on_change=write_data, key='frequency_penalty' + current_chat)
     st.caption("[官网参数说明](https://platform.openai.com/docs/api-reference/completions/create)")
