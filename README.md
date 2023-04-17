@@ -6,8 +6,7 @@
 - 模型参数调节
 - 对话导出为PDF文件
 
-🤩 [项目示例](https://pearxuy-gpt.streamlit.app/)   
-   欢迎star🌟
+🤩 [项目示例](https://pearxuy-gpt.streamlit.app/)  欢迎star🌟
 
 - 可在网页的设置选项中配置Openai Key，此时不会留存历史对话，仅在用户当前会话有效，他人不会共享。
 - 在Secrtes中配置Openai Key后，将留存历史对话记录，此时需设置为私人应用，打造为个人GPT助理。    
