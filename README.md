@@ -15,7 +15,7 @@
 ## 本地部署
 1. 建立虚拟环境（建议）
 
-2. 复制项目
+2. 克隆项目（也可以手动下载到本地）
 ```bash
 git clone https://github.com/PierXuY/ChatGPT-Assistant.git
 ```
