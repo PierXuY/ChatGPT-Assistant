@@ -68,7 +68,6 @@ if "initial_settings" not in st.session_state:
     st.session_state["initial_settings"] = True
 
 with st.sidebar:
-    # 此处href与下文的st.header内容相对应，跳转锚点
     st.markdown("# 🤖 聊天窗口")
     current_chat = st.radio(
         label='历史聊天窗口',
@@ -112,6 +111,7 @@ with st.sidebar:
 
     st.write("\n")
     st.write("\n")
+    # 此处href与下文的st.header内容相对应，跳转锚点
     st.markdown("<a href='#chatgpt-assistant' id='chat-window'>➡️ 直达输入区</a>",unsafe_allow_html=True)
 
 # 加载数据
