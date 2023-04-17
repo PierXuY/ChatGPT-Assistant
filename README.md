@@ -51,8 +51,9 @@ streamlit run app.py
 一键复制[已部署项目](https://huggingface.co/spaces/Pearx/ChatGPT-Assistant)即可。同样无须科学上网。   
 但有以下几点需注意：
 - 不支持侧边栏“直达输入区”功能
-- 侧边栏会随主体页面滑动，当聊天记录过多后不方便切换窗口。
-- 当Files中的文件更新时，历史聊天记录会被清空。
+- 侧边栏会随主体页面拓展，当聊天记录过多时不方便切换窗口。
+- 当Files中的文件更新时，历史聊天记录会被清空。   
+
 复制项目后，在Hugging Face的Settings中设置Secrets即可。参考下图：
 <img src="https://pic2.58cdn.com.cn/nowater/webim/big/n_v2ab9e3ca91d034642b734afd82de09724.png" alt="hf_secrets.png" style="flex: 1; width: 50%;" />
 
