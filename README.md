@@ -47,10 +47,19 @@ streamlit run app.py
 </div>   
 也可以在部署完成后再进行配置。
 
+## Hugging Face部署
+一键复制[已部署项目](https://huggingface.co/spaces/Pearx/ChatGPT-Assistant)即可。同样无须科学上网。   
+但有以下几点需注意：
+- 不支持侧边栏“直达输入区”功能
+- 侧边栏会随主体页面滑动，当聊天记录过多后不方便切换窗口。
+- 当Files中的文件更新时，历史聊天记录会被清空。
+复制项目后，在Hugging Face的Settings中设置Secrets即可。参考下图：
+<img src="https://pic9.58cdn.com.cn/nowater/webim/big/n_v21b211eb5c2a64b3a898db514eafb9d19.png" alt="hf_secrets.png" style="flex: 1; width: 50%;" />
+
 # 说明
 - 在[helper.py](https://github.com/PierXuY/ChatGPT-Assistant/blob/main/helper.py)文件中可自定义用户名和SVG格式[头像](https://www.dicebear.com/playground?style=identicon)。
 - 在部署的项目源码中编辑[set_context.py](https://github.com/PierXuY/ChatGPT-Assistant/blob/main/set_context.py)，即可增加预设定的上下文选项，会自动同步到应用中。
-
+- 有条件的可以考虑把[helper.py](https://github.com/PierXuY/ChatGPT-Assistant/blob/main/helper.py)中的文件读写逻辑改为云数据库操作，防止历史记录丢失。
 
 
 # 致谢
