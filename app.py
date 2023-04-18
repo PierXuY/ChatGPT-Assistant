@@ -87,7 +87,6 @@ with st.sidebar:
     if st.session_state['pre_chat'] != current_chat:
         st.session_state['pre_chat'] = current_chat
         st.session_state['if_chat_change'] = True
-    st.write("---")
 
 
     def create_chat_button_callback():
@@ -115,8 +114,6 @@ with st.sidebar:
     delete_chat_button = c2.button('删除', use_container_width=True, key='delete_chat_button',
                                    on_click=delete_chat_button_callback)
 
-    st.write("\n")
-    st.write("\n")
     # 此处href与下文的st.header内容相对应，跳转锚点
     # st.markdown("<a href='#chatgpt-assistant' id='chat-window'>➡️ 直达输入区</a>",unsafe_allow_html=True)
 
