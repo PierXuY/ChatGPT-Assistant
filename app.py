@@ -6,6 +6,7 @@ import pandas as pd
 import openai
 import re
 from requests.models import ChunkedEncodingError
+from streamlit.components import v1
 
 st.set_page_config(page_title='ChatGPT Assistant', layout='wide', page_icon='🤖')
 
@@ -52,6 +53,11 @@ st.markdown("""
     #chat-window:hover{
         color: blue;
     }
+    .stRadio {
+        overflow: overlay;
+        max-height: 25vh;
+        min-height: 25vh;
+        }
     </style>
 """, unsafe_allow_html=True)
 if "initial_settings" not in st.session_state:
@@ -112,7 +118,7 @@ with st.sidebar:
     st.write("\n")
     st.write("\n")
     # 此处href与下文的st.header内容相对应，跳转锚点
-    st.markdown("<a href='#chatgpt-assistant' id='chat-window'>➡️ 直达输入区</a>",unsafe_allow_html=True)
+    # st.markdown("<a href='#chatgpt-assistant' id='chat-window'>➡️ 直达输入区</a>",unsafe_allow_html=True)
 
 # 加载数据
 if ("history" + current_chat not in st.session_state) or (st.session_state['if_chat_change']):
@@ -324,3 +330,21 @@ if ("r" in st.session_state) and (current_chat == st.session_state["chat_of_r"])
         st.session_state.pop(current_chat + 'report')
     if 'r' in st.session_state:
         st.session_state.pop("r")
+
+js = '''
+<script>
+    // var body = window.parent.document.querySelector(".main");
+    var textinput = window.parent.document.querySelector("textarea[aria-label='**输入：**']");   //label需要相对应
+    
+    window.parent.document.addEventListener('dblclick', function (event) {
+        event.stopPropagation();
+        event.preventDefault();
+        textinput.focus();
+    });
+
+    textinput.addEventListener('focusout', function() {
+        event.stopPropagation();   // 抑制失去焦点时自动提交输入内容
+        });
+</script>
+'''
+v1.html(js, height=0)
