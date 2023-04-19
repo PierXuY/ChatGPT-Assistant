@@ -99,10 +99,10 @@ css_code = """
 """
 
 js_code = """
-    var body = window.parent.document.querySelector(".main");
-    var textinput = window.parent.document.querySelector("textarea[aria-label='**输入：**']");   //label需要相对应
-    var baseweb = window.parent.document.querySelector("div[data-baseweb = 'textarea']"); 
-    var button = window.parent.document.querySelector("button[kind='secondaryFormSubmit']");    
+    var body = window.parent.document.querySelector("body");
+    var textinput = window.document.querySelector("textarea[aria-label='**输入：**']");   //label需要相对应
+    var baseweb = window.document.querySelector("div[data-baseweb = 'textarea']"); 
+    var button = window.document.querySelector("button[kind='secondaryFormSubmit']");    
     window.parent.document.addEventListener('dblclick', function (event) {
         event.stopPropagation();
         event.preventDefault();
