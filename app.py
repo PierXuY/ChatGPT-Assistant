@@ -7,6 +7,8 @@ import openai
 import re
 from requests.models import ChunkedEncodingError
 from streamlit.components import v1
+from streamlit.web.server.websocket_headers import _get_websocket_headers
+from streamlit.components import v1
 
 st.set_page_config(page_title='ChatGPT Assistant', layout='wide', page_icon='🤖')
 
@@ -328,20 +330,35 @@ if ("r" in st.session_state) and (current_chat == st.session_state["chat_of_r"])
     if 'r' in st.session_state:
         st.session_state.pop("r")
 
-js = '''
-<script>
+headers = _get_websocket_headers()
+if_mobile = re.search("iP(hone|ad)|Android", headers["User-Agent"])
+js_code = """
     // var body = window.parent.document.querySelector(".main");
     var textinput = window.parent.document.querySelector("textarea[aria-label='**输入：**']");   //label需要相对应
-    
+    var baseweb = window.parent.document.querySelector("div[data-baseweb = 'textarea']"); 
     window.parent.document.addEventListener('dblclick', function (event) {
         event.stopPropagation();
         event.preventDefault();
         textinput.focus();
     });
 
-    textinput.addEventListener('focusout', function() {
-        event.stopPropagation();   // 抑制失去焦点时自动提交输入内容
+    window.parent.document.addEventListener('mousedown', (event) => {
+      if (event.detail === 2) {
+        event.preventDefault();
+      }
+    });
+"""
+js_textarea = """
+    textinput.addEventListener('focusin', function() {
+        event.stopPropagation();   
+        baseweb.style.borderColor = 'rgb(255,75,75)';
         });
-</script>
-'''
-v1.html(js, height=0)
+
+    textinput.addEventListener('focusout', function() {
+        event.stopPropagation();   
+        baseweb.style.borderColor = 'white';
+        });    
+"""
+if not if_mobile:
+    js_code = js_code + js_textarea
+v1.html(f"<script>{js_code}</script>", height=0)
