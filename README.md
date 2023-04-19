@@ -10,8 +10,9 @@
 
 - 直接使用已部署项目，可在网页的设置选项中配置Openai Key，此时不会留存历史对话，仅在用户当前会话有效，他人不会共享。
 - 自行部署项目，在Secrets中配置Openai Key后，将留存历史对话记录，此时需设置为私人应用，打造为个人GPT助理。    
-### 技巧：
-- 双击页面可直接定位输入框进行输入。
+### 使用技巧：
+- 双击页面可直接定位输入栏
+- Ctrl + Enter 可快捷提交问题
 # 部署
 ## 本地部署
 1. 建立虚拟环境（建议）
@@ -59,7 +60,7 @@ streamlit run app.py
 <img src="https://pic2.58cdn.com.cn/nowater/webim/big/n_v2ab9e3ca91d034642b734afd82de09724.png" alt="hf_secrets.png" style="flex: 1; width: 50%;" />
 
 # 说明
-- 在[helper.py](https://github.com/PierXuY/ChatGPT-Assistant/blob/main/helper.py)文件中可自定义用户名和SVG格式[头像](https://www.dicebear.com/playground?style=identicon)。
+- 在[custom.py](https://github.com/PierXuY/ChatGPT-Assistant/blob/main/custom.py)文件中可自定义用户名和SVG格式头像[(来源)](https://www.dicebear.com/playground?style=identicon)。
 - 在部署的项目源码中编辑[set_context.py](https://github.com/PierXuY/ChatGPT-Assistant/blob/main/set_context.py)，即可增加预设定的上下文选项，会自动同步到应用中。
 - 有条件的可以考虑把[helper.py](https://github.com/PierXuY/ChatGPT-Assistant/blob/main/helper.py)中的文件读写逻辑改为云数据库操作，防止历史记录丢失。
 
