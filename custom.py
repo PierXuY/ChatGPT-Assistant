@@ -99,6 +99,7 @@ css_code = """
 """
 
 js_code = """
+<script>
     var body = window.parent.document.querySelector(".main");
     var textinput = window.parent.document.querySelector("textarea[aria-label='**输入：**']");   //label需要相对应
     var baseweb = window.parent.document.querySelector("div[data-baseweb = 'textarea']"); 
@@ -130,4 +131,5 @@ js_code = """
         event.stopPropagation();   
         baseweb.style.borderColor = 'white';
         });    
+</script>
 """
