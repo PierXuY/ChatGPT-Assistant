@@ -31,7 +31,8 @@
 也可以在部署完成后再进行配置。
 
 ## Hugging Face部署
-一键复制[已部署项目](https://huggingface.co/spaces/Pearx/ChatGPT-Assistant)即可，同样无须科学上网。   
+一键复制[已部署项目](https://huggingface.co/spaces/Pearx/ChatGPT-Assistant)即可，同样无须科学上网，注意设置为私人应用。   
+
 有以下几点不同于Streamlit Cloud：
 - 侧边栏会随主体页面拓展，当聊天记录过多时不方便切换窗口。
 - 当Files中的文件更新时，历史聊天记录会被清空。   
