@@ -16,27 +16,6 @@
 - Ctrl + Enter 可快捷提交问题
 
 # 部署
-## 本地部署
-1. 建立虚拟环境（建议）
-
-2. 克隆项目（也可以手动下载到本地）
-```bash
-git clone https://github.com/PierXuY/ChatGPT-Assistant.git
-```
-
-3. 安装依赖
-```bash
-pip install -r requirements.txt
-```
-
-4. 设置API Key   
-
-- 在 `.streamlit/secrets.toml`文件中写入`apikey = "Your Openai Key"`
-
-5. 启动应用
-```bash
-streamlit run app.py
-```
 
 ## Streamlit Cloud部署（推荐）
 轻松免费部署，且无须科学上网即可使用，注意设置为私人应用。   
@@ -59,6 +38,29 @@ streamlit run app.py
 
 复制项目后，在Hugging Face的Settings中设置Secrets即可。参考下图：
 <img src="https://pic2.58cdn.com.cn/nowater/webim/big/n_v2ab9e3ca91d034642b734afd82de09724.png" alt="hf_secrets.png" style="flex: 1; width: 50%;" />
+
+## 本地部署
+本地部署需要科学上网。
+1. 建立虚拟环境（建议）
+
+2. 克隆项目（也可以手动下载到本地）
+```bash
+git clone https://github.com/PierXuY/ChatGPT-Assistant.git
+```
+
+3. 安装依赖
+```bash
+pip install -r requirements.txt
+```
+
+4. 设置API Key   
+
+- 在 `.streamlit/secrets.toml`文件中写入`apikey = "Your Openai Key"`
+
+5. 启动应用
+```bash
+streamlit run app.py
+```
 
 # 说明
 - 在[custom.py](https://github.com/PierXuY/ChatGPT-Assistant/blob/main/custom.py)文件中可自定义用户名和SVG格式头像[(参考来源)](https://www.dicebear.com/playground?style=identicon)。
