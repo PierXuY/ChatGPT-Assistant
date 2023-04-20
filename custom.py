@@ -33,10 +33,9 @@ set_context_all = {"不设置": ""}
 set_context_all.update(set_context)
 
 # 自定义css、js
-# 第一个是减少侧边栏顶部空白，不同版本的st存在区别（此处适用1.19.0）
 css_code = """
     <style>
-    div.css-1vq4p4l.e1fqkh3o4 {
+    section[data-testid="stSidebar"]>div>div:nth-child(2) {
         padding-top: 1.7rem !important;
         }
     .avatar {
