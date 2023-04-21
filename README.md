@@ -19,7 +19,7 @@
 
 ## Streamlit Cloud部署（推荐）
 轻松免费部署，且无须科学上网即可使用，注意设置为私人应用。   
-可参考由[@Hannah11111](https://github.com/Hannah11111)提供的[详细步骤](https://github.com/PierXuY/ChatGPT-Assistant/blob/main/tutorial.md)。
+可参考由[@Hannah11111](https://github.com/Hannah11111)提供的[详细步骤](https://github.com/PierXuY/ChatGPT-Assistant/blob/main/Tutorial.md)。
 1. `Fork`本项目到个人Github仓库。
 2. 注册[Streamlit Cloud账号](https://share.streamlit.io/)，并连接到Github。
 3. 开始部署应用，具体可参考[官方教程](https://docs.streamlit.io/streamlit-community-cloud/get-started)。   
