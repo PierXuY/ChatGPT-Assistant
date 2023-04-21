@@ -115,6 +115,8 @@ area_gpt_content = st.empty()
 # 报错展示
 area_error = st.empty()
 
+st.write("\n")
+st.write("\n")
 st.header('ChatGPT Assistant')
 tap_input, tap_context, tap_set = st.tabs(['💬 聊天', '🗒️ 预设', '⚙️ 设置'])
 
