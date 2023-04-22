@@ -10,10 +10,8 @@ import copy
 
 def get_history_chats(path):
     if "apikey" in st.secrets:
-        try:
+        if not os.path.exists(path):
             os.makedirs(path)
-        except FileExistsError:
-            pass
         files = [f for f in os.listdir(f'./{path}') if f.endswith('.json')]
         files_with_time = [(f, os.stat(f'./{path}/' + f).st_ctime) for f in files]
         sorted_files = sorted(files_with_time, key=lambda x: x[1], reverse=True)
