@@ -1,5 +1,5 @@
 # 🤖 ChatGPT-Assistant
-基于Streamlit搭建的ChatGPT对话助手，简单易用，支持以下功能：
+基于Streamlit搭建的ChatGPT对话助手，简单易用，不易断连，支持以下功能：
 - 多聊天窗口
 - 历史对话留存
 - 预设聊天上下文 
