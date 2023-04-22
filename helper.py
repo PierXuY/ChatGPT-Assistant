@@ -26,10 +26,8 @@ def get_history_chats(path):
 
 
 def save_data(path: str, file_name: str, history: list, paras: dict, contexts: dict, **kwargs):
-    try:
+    if not os.path.exists(path):
         os.makedirs(path)
-    except FileExistsError:
-        pass
     with open(f"./{path}/{file_name}.json", 'w', encoding='utf-8') as f:
         json.dump({"history": history, "paras": paras, "contexts": contexts, **kwargs}, f)
 
