@@ -1,60 +1,27 @@
 import json
 import os
 import re
-import builtins
-import shutil
 import uuid
-from functools import wraps
 import streamlit as st
 import pandas as pd
 from custom import *
-
-
-# 聊天记录处理
-def clear_folder(path):
-    if not os.path.exists(path):
-        return
-    for file_name in os.listdir(path):
-        file_path = os.path.join(path, file_name)
-        try:
-            shutil.rmtree(file_path)
-        except Exception:
-            pass
-
-
-def set_chats_path():
-    save_path = 'chat_history'
-    if 'apikey' not in st.secrets:
-        clear_folder('tem_files')
-        save_path = 'tem_files/tem_chat' + str(uuid.uuid4())
-    return save_path
-
-
-# 重新open函数，路径不存在时自动创建
-def create_path(func):
-    @wraps(func)
-    def wrapper(path, *args, **kwargs):
-        if not os.path.exists(os.path.dirname(path)):
-            os.makedirs(os.path.dirname(path))
-        return func(path, *args, **kwargs)
-
-    return wrapper
-
-
-open = create_path(builtins.open)
+import copy
 
 
 def get_history_chats(path):
-    try:
-        os.makedirs(path)
-    except FileExistsError:
-        pass
-    files = [f for f in os.listdir(f'./{path}') if f.endswith('.json')]
-    files_with_time = [(f, os.stat(f'./{path}/' + f).st_ctime) for f in files]
-    sorted_files = sorted(files_with_time, key=lambda x: x[1], reverse=True)
-    chat_names = [os.path.splitext(f[0])[0] for f in sorted_files]
-    if len(chat_names) == 0:
-        chat_names.append('New Chat_' + str(uuid.uuid4()))
+    if "apikey" in st.secrets:
+        try:
+            os.makedirs(path)
+        except FileExistsError:
+            pass
+        files = [f for f in os.listdir(f'./{path}') if f.endswith('.json')]
+        files_with_time = [(f, os.stat(f'./{path}/' + f).st_ctime) for f in files]
+        sorted_files = sorted(files_with_time, key=lambda x: x[1], reverse=True)
+        chat_names = [os.path.splitext(f[0])[0] for f in sorted_files]
+        if len(chat_names) == 0:
+            chat_names.append('New Chat_' + str(uuid.uuid4()))
+    else:
+        chat_names = ['New Chat_' + str(uuid.uuid4())]
     return chat_names
 
 
@@ -76,9 +43,11 @@ def load_data(path: str, file_name: str) -> dict:
             data = json.load(f)
             return data
     except FileNotFoundError:
-        with open(f"./{path}/{file_name}.json", 'w', encoding='utf-8') as f:
-            f.write(json.dumps(initial_content_all))
-        return initial_content_all
+        content = copy.deepcopy(initial_content_all)
+        if "apikey" in st.secrets:
+            with open(f"./{path}/{file_name}.json", 'w', encoding='utf-8') as f:
+                f.write(json.dumps(content))
+        return content
 
 
 def show_each_message(message, role, area=None):
