@@ -38,6 +38,9 @@ css_code = """
     section[data-testid="stSidebar"]>div>div:nth-child(2) {
         padding-top: 1.7rem !important;
         }
+    section.main>div{
+        padding-top: 35px;
+    }
     .avatar {
         display: flex;
         align-items: center;
