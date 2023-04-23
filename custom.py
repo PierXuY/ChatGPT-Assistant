@@ -14,6 +14,7 @@ gpt_svg = """
 user_background_color = ''
 gpt_background_color = 'rgba(225, 231, 235, 0.5)'
 # 模型初始设置
+model = "gpt-3.5-turbo"
 initial_content_history = [{"role": 'system',
                             "content": '当你的回复中涉及代码块时，请在markdown语法中标明语言类型。如果不涉及，请忽略这句话。'}]
 initial_content_all = {"history": initial_content_history,
