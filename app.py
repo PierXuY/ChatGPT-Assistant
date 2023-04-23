@@ -137,8 +137,17 @@ with tap_set:
         st.session_state['history' + current_chat] = copy.deepcopy(initial_content_history)
         write_data()
 
-
-    st.button("清空聊天记录", use_container_width=True, on_click=clear_button_callback)
+    c1, c2 = st.columns(2)
+    with c1:
+        st.button("清空聊天记录", use_container_width=True, on_click=clear_button_callback)
+    with c2:
+        btn = st.download_button(
+            label="导出聊天记录",
+            data=download_history(st.session_state['history' + current_chat]),
+            file_name=f'{current_chat.split("_")[0]}.md',
+            mime="text/markdown",
+            use_container_width=True
+        )
 
     st.markdown("OpenAI API Key (可选)")
     st.text_input("OpenAI API Key (可选)", type='password', key='apikey_input', label_visibility='collapsed')
@@ -276,6 +285,7 @@ if ("r" in st.session_state) and (current_chat == st.session_state["chat_of_r"])
         st.session_state.pop(current_chat + 'report')
     if 'r' in st.session_state:
         st.session_state.pop("r")
+    st.experimental_rerun()
 
 # 添加事件监听
 v1.html(js_code, height=0)

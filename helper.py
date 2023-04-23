@@ -6,6 +6,7 @@ import streamlit as st
 import pandas as pd
 from custom import *
 import copy
+import io
 
 
 def get_history_chats(path):
@@ -104,3 +105,16 @@ def extract_chars(text, num):
         if char_num >= num:
             break
     return chars
+
+
+def download_history(history):
+    md_text = ""
+    for msg in history:
+        if msg['role'] == 'user':
+            md_text += f'## {user_name}：\n{msg["content"]}\n'
+        elif msg['role'] == 'assistant':
+            md_text += f'## {"ChatGPT"}：\n{msg["content"]}\n'
+    output = io.BytesIO()
+    output.write(md_text.encode('utf-8'))
+    output.seek(0)
+    return output
