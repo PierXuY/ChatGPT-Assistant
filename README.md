@@ -4,7 +4,7 @@
 - 历史对话留存
 - 预设聊天上下文 
 - 模型参数调节
-- 对话导出为PDF文件
+- 对话导出为Markdown文件
 
 ## 🤩 [已部署项目](https://pearxuy-gpt.streamlit.app/)
 
