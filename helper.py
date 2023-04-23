@@ -113,7 +113,7 @@ def download_history(history):
         if msg['role'] == 'user':
             md_text += f'## {user_name}：\n{msg["content"]}\n'
         elif msg['role'] == 'assistant':
-            md_text += f'## {"ChatGPT"}：\n{msg["content"]}\n'
+            md_text += f'## {gpt_name}：\n{msg["content"]}\n'
     output = io.BytesIO()
     output.write(md_text.encode('utf-8'))
     output.seek(0)
