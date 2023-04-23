@@ -6,7 +6,7 @@ import pandas as pd
 import openai
 from requests.models import ChunkedEncodingError
 from streamlit.components import v1
-from custom import css_code, js_code, set_context_all
+from custom import model, css_code, js_code, set_context_all
 
 st.set_page_config(page_title='ChatGPT Assistant', layout='wide', page_icon='🤖')
 # 自定义元素样式
@@ -238,7 +238,7 @@ with tap_input:
                     openai.api_key = apikey
                 else:
                     openai.api_key = st.secrets["apikey"]
-                r = openai.ChatCompletion.create(model="gpt-3.5-turbo", messages=history_need_input, stream=True,
+                r = openai.ChatCompletion.create(model=model, messages=history_need_input, stream=True,
                                                  **paras_need_input)
             except (FileNotFoundError, KeyError):
                 area_error.error("缺失 OpenAI API Key，请在复制项目后配置Secrets，或者在设置中进行临时配置。"
