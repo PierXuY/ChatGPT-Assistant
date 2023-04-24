@@ -7,9 +7,6 @@
 - 对话导出为Markdown文件
 
 ## 🤩 [已部署项目](https://pearxuy-gpt.streamlit.app/)
-
-[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://pearxuy-gpt.streamlit.app/)
-
 - 直接使用已部署项目，可在网页的设置选项中配置Openai Key，此时不会留存历史对话，仅在用户当前会话有效，他人不会共享。
 - 自行部署项目，在Secrets中配置Openai Key后，将留存历史对话记录，此时需设置为私人应用，打造为个人GPT助理。   
 
