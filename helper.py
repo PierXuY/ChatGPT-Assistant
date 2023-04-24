@@ -31,11 +31,15 @@ def save_data(path: str, file_name: str, history: list, paras: dict, contexts: d
         json.dump({"history": history, "paras": paras, "contexts": contexts, **kwargs}, f)
 
 
-def remove_data(path: str, file_name: str):
+def remove_data(path: str, chat_name: str):
     try:
-        os.remove(f"./{path}/{file_name}.json")
+        os.remove(f"./{path}/{chat_name}.json")
     except FileNotFoundError:
         pass
+    # 清除缓存
+    st.session_state.pop('history' + chat_name)
+    for item in ["context_select", "context_input", "context_level", *initial_content_all['paras']]:
+        st.session_state.pop(item + chat_name + "value")
 
 
 def load_data(path: str, file_name: str) -> dict:
@@ -77,11 +81,14 @@ def show_messages(messages: list):
 
 # 根据context_level提取history
 def get_history_input(history, level):
-    df_history = pd.DataFrame(history)
-    df_system = df_history.query('role=="system"')
-    df_input = df_history.query('role!="system"')
-    df_input = df_input[-level * 2:]
-    res = pd.concat([df_system, df_input], ignore_index=True).to_dict('records')
+    if level != 0:
+        df_history = pd.DataFrame(history)
+        df_system = df_history.query('role=="system"')
+        df_input = df_history.query('role!="system"')
+        df_input = df_input[-level * 2:]
+        res = pd.concat([df_system, df_input], ignore_index=True).to_dict('records')
+    else:
+        res = []
     return res
 
 
