@@ -107,6 +107,8 @@ js_code = """
     var textinput = window.parent.document.querySelector("textarea[aria-label='**输入：**']");   //label需要相对应
     var baseweb = window.parent.document.querySelector("div[data-baseweb = 'textarea']"); 
     var button = window.parent.document.querySelector("button[kind='secondaryFormSubmit']");    
+    
+    // 双击点位输入框，同时抑制双击时选中文本事件
     window.parent.document.addEventListener('dblclick', function (event) {
         event.stopPropagation();
         event.preventDefault();
@@ -116,7 +118,17 @@ js_code = """
       if (event.detail === 2) {
         event.preventDefault();
       }
-    });    
+    });  
+    textinput.addEventListener('focusin', function() {
+        event.stopPropagation();   
+        baseweb.style.borderColor = 'rgb(255,75,75)';
+        });
+    textinput.addEventListener('focusout', function() {
+        event.stopPropagation();   
+        baseweb.style.borderColor = 'white';
+        });   
+    
+    // Ctrl + Enter快捷方式
     window.parent.document.addEventListener("keydown", event => {
       // 按下Ctrl + Enter时
       if (event.ctrlKey && event.key === "Enter") {
@@ -125,14 +137,41 @@ js_code = """
         button.click();}
         textinput.blur();
       }
-    });
-    textinput.addEventListener('focusin', function() {
-        event.stopPropagation();   
-        baseweb.style.borderColor = 'rgb(255,75,75)';
+    }); 
+ 
+    // 处理tabs 在第一次切换时的残影问题
+    const tabs = window.parent.document.querySelectorAll('button[data-baseweb="tab"] p');
+    const tab_panels = window.parent.document.querySelectorAll('div[data-baseweb="tab-panel"]');
+    
+    tabs.forEach(function (tab, index) {
+        const tab_panel_child = tab_panels[index].querySelectorAll("*");
+    
+        function set_visibility(state) {
+            tab_panels[index].style.visibility = state;
+            tab_panel_child.forEach(function (child) {
+                child.style.visibility = state;
+            });
+        }
+    
+        tab.addEventListener("click", function (event) {
+            set_visibility('hidden')
+    
+            let element = tab_panels[index].querySelector('div[data-testid="stVerticalBlock"]')
+            const waitMs = 1;
+    
+            function waitForLayout() {
+                const block_width = window.parent.document.querySelector('section.main div[data-testid="stVerticalBlock"]').offsetWidth
+                console.log('block',block_width)
+                console.log('element',element.offsetWidth)
+    
+                if (element.offsetWidth === block_width) {
+                    set_visibility("visible");
+                } else {
+                    setTimeout(waitForLayout, waitMs);
+                }
+            }
+            waitForLayout();
         });
-    textinput.addEventListener('focusout', function() {
-        event.stopPropagation();   
-        baseweb.style.borderColor = 'white';
-        });    
+    });
 </script>
 """
