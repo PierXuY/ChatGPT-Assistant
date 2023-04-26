@@ -162,7 +162,7 @@ js_code = """
     
             let element = tab_panels[index].querySelector('div[data-testid="stVerticalBlock"]');
             let main_block = window.parent.document.querySelector('section.main div[data-testid="stVerticalBlock"]');
-            const waitMs = 10;
+            const waitMs = 30;
     
             function waitForLayout() {
                 if (element.offsetWidth === main_block.offsetWidth) {
