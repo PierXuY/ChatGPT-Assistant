@@ -9,7 +9,7 @@ import copy
 import io
 
 
-def get_history_chats(path):
+def get_history_chats(path: str) -> list:
     if "apikey" in st.secrets:
         if not os.path.exists(path):
             os.makedirs(path)
@@ -37,9 +37,12 @@ def remove_data(path: str, chat_name: str):
     except FileNotFoundError:
         pass
     # 清除缓存
-    st.session_state.pop('history' + chat_name)
-    for item in ["context_select", "context_input", "context_level", *initial_content_all['paras']]:
-        st.session_state.pop(item + chat_name + "value")
+    try:
+        st.session_state.pop('history' + chat_name)
+        for item in ["context_select", "context_input", "context_level", *initial_content_all['paras']]:
+            st.session_state.pop(item + chat_name + "value")
+    except KeyError:
+        pass
 
 
 def load_data(path: str, file_name: str) -> dict:
@@ -55,7 +58,7 @@ def load_data(path: str, file_name: str) -> dict:
         return content
 
 
-def show_each_message(message, role, area=None):
+def show_each_message(message: str, role: str, area=None):
     if area is None:
         area = [st.markdown] * 2
     if role == 'user':
@@ -80,7 +83,7 @@ def show_messages(messages: list):
 
 
 # 根据context_level提取history
-def get_history_input(history, level):
+def get_history_input(history: list, level: int) -> list:
     if level != 0:
         df_history = pd.DataFrame(history)
         df_system = df_history.query('role=="system"')
@@ -93,13 +96,13 @@ def get_history_input(history, level):
 
 
 # 去除#号右边的空格
-def remove_hashtag_right__space(text):
+def remove_hashtag_right__space(text: str) -> str:
     res = re.sub(r"(#+)\s*", r"\1", text)
     return res
 
 
 # 提取文本
-def extract_chars(text, num):
+def extract_chars(text: str, num: int) -> str:
     char_num = 0
     chars = ''
     for char in text:
@@ -114,7 +117,7 @@ def extract_chars(text, num):
     return chars
 
 
-def download_history(history):
+def download_history(history: list):
     md_text = ""
     for msg in history:
         if msg['role'] == 'user':
@@ -125,3 +128,17 @@ def download_history(history):
     output.write(md_text.encode('utf-8'))
     output.seek(0)
     return output
+
+
+def filename_correction(filename: str) -> str:
+    pattern = r'[^\w\.-]'
+    filename = re.sub(pattern, '', filename)
+    return filename
+
+
+def url_correction(text: str) -> str:
+    pattern = r'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+#]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+'
+    links = re.findall(pattern, text)
+    for link in links:
+        text = text.replace(link, " " + link + " ")
+    return text

@@ -37,11 +37,22 @@ set_context_all.update(set_context)
 css_code = """
     <style>
     section[data-testid="stSidebar"]>div>div:nth-child(2) {
-        padding-top: 1.7rem !important;
+        padding-top: 1.3rem !important;
         }
     section.main>div{
-        padding-top: 35px;
+        padding-top: 20px;
     }
+    section[data-testid="stSidebar"] h1{
+        text-shadow: 2px 2px #ccc;
+        font-size: 28px !important; 
+        font-family: "微软雅黑","auto";
+        margin-bottom: 5px;
+        font-weight: 500 !important;
+    }
+    section[data-testid="stSidebar"] .stRadio {
+        overflow: overlay;
+        height: 30vh;
+        }
     .avatar {
         display: flex;
         align-items: center;
@@ -57,7 +68,6 @@ css_code = """
         font-size: 20px;
         margin: 0px;
     } 
-
     .content-div {
         padding: 5px 20px;
         margin: 5px;
@@ -71,18 +81,6 @@ css_code = """
         padding: 4px;
         margin : 2px;
     } 
-    #chat-window{
-        padding: 10px 0px;
-        text-decoration: none;
-    }
-    #chat-window:hover{
-        color: blue;
-    }
-    .stRadio {
-        overflow: overlay;
-        max-height: 26vh;
-        min-height: 26vh;
-        }
     div[data-testid="stForm"]{
         border: none;
         padding: 0;
@@ -91,58 +89,64 @@ css_code = """
         border: none;
         padding: 0;
     }
-    h1{
-        text-shadow: 2px 2px #ccc;
-        font-size: 28px !important; 
-        font-family: "微软雅黑","auto";
-        margin-bottom: 10px;
-        font-weight: 500 !important;
-    }
     </style>
 """
 
 js_code = """
 <script>
-    var body = window.parent.document.querySelector(".main");
-    var textinput = window.parent.document.querySelector("textarea[aria-label='**输入：**']");   //label需要相对应
-    var baseweb = window.parent.document.querySelector("div[data-baseweb = 'textarea']"); 
-    var button = window.parent.document.querySelector("button[kind='secondaryFormSubmit']");    
+    const textinput = window.parent.document.querySelector("textarea[aria-label='**输入：**']");   //label需要相对应
+    const textarea = window.parent.document.querySelector("div[data-baseweb = 'textarea']");
+    const button = window.parent.document.querySelector("button[kind='secondaryFormSubmit']");
+    const tabs = window.parent.document.querySelectorAll('button[data-baseweb="tab"] p');
+    const tabs_div = window.parent.document.querySelector('div[role="tablist"]');
+    const tab_panels = window.parent.document.querySelectorAll('div[data-baseweb="tab-panel"]');
     
     // 双击点位输入框，同时抑制双击时选中文本事件
     window.parent.document.addEventListener('dblclick', function (event) {
-        event.stopPropagation();
-        event.preventDefault();
-        textinput.focus();
+        let activeTab = tabs_div.querySelector('button[aria-selected="true"]');
+        if (activeTab.querySelector('p').textContent === '💬 聊天') {
+            textinput.focus();
+        } else {
+            tabs[0].click();
+            const waitMs = 1;
+            
+            function waitForFocus() {
+                if (window.parent.document.activeElement === textinput) {
+                } else {
+                    setTimeout(function () {
+                        textinput.focus();
+                        waitForFocus();
+                    }, waitMs);
+                }
+            }
+            waitForFocus();
+        }
     });
     window.parent.document.addEventListener('mousedown', (event) => {
-      if (event.detail === 2) {
-        event.preventDefault();
-      }
-    });  
-    textinput.addEventListener('focusin', function() {
-        event.stopPropagation();   
-        baseweb.style.borderColor = 'rgb(255,75,75)';
-        });
-    textinput.addEventListener('focusout', function() {
-        event.stopPropagation();   
-        baseweb.style.borderColor = 'white';
-        });   
+        if (event.detail === 2) {
+            event.preventDefault();
+        }
+    });
+    textinput.addEventListener('focusin', function (event) {
+        event.stopPropagation();
+        textarea.style.borderColor = 'rgb(255,75,75)';
+    });
+    textinput.addEventListener('focusout', function (event) {
+        event.stopPropagation();
+        textarea.style.borderColor = 'white';
+    });
     
     // Ctrl + Enter快捷方式
     window.parent.document.addEventListener("keydown", event => {
-      // 按下Ctrl + Enter时
-      if (event.ctrlKey && event.key === "Enter") {
-        // 模拟按钮的点击事件
-        if (textinput.textContent != ''){
-        button.click();}
-        textinput.blur();
-      }
-    }); 
- 
-    // 处理tabs 在第一次切换时的残影问题
-    const tabs = window.parent.document.querySelectorAll('button[data-baseweb="tab"] p');
-    const tab_panels = window.parent.document.querySelectorAll('div[data-baseweb="tab-panel"]');
+        if (event.ctrlKey && event.key === "Enter") {
+            if (textinput.textContent !== '') {
+                button.click();
+            }
+            textinput.blur();
+        }
+    });
     
+    // 处理tabs 在第一次切换时的渲染问题
     tabs.forEach(function (tab, index) {
         const tab_panel_child = tab_panels[index].querySelectorAll("*");
     
@@ -156,15 +160,12 @@ js_code = """
         tab.addEventListener("click", function (event) {
             set_visibility('hidden')
     
-            let element = tab_panels[index].querySelector('div[data-testid="stVerticalBlock"]')
-            const waitMs = 1;
+            let element = tab_panels[index].querySelector('div[data-testid="stVerticalBlock"]');
+            let main_block = window.parent.document.querySelector('section.main div[data-testid="stVerticalBlock"]');
+            const waitMs = 10;
     
             function waitForLayout() {
-                const block_width = window.parent.document.querySelector('section.main div[data-testid="stVerticalBlock"]').offsetWidth
-                console.log('block',block_width)
-                console.log('element',element.offsetWidth)
-    
-                if (element.offsetWidth === block_width) {
+                if (element.offsetWidth === main_block.offsetWidth) {
                     set_visibility("visible");
                 } else {
                     setTimeout(waitForLayout, waitMs);

@@ -82,27 +82,27 @@ show_messages(st.session_state["history" + current_chat])
 
 # 数据写入文件
 def write_data(new_chat_name=current_chat):
-    # 防止高频创建时组件尚未渲染完成，不影响正常写入
-    if "frequency_penalty" + current_chat in st.session_state:
-        if "apikey" in st.secrets:
-            st.session_state["paras"] = {
-                "temperature": st.session_state["temperature" + current_chat],
-                "top_p": st.session_state["top_p" + current_chat],
-                "presence_penalty": st.session_state["presence_penalty" + current_chat],
-                "frequency_penalty": st.session_state["frequency_penalty" + current_chat],
-            }
-            st.session_state["contexts"] = {
-                "context_select": st.session_state["context_select" + current_chat],
-                "context_input": st.session_state["context_input" + current_chat],
-                "context_level": st.session_state["context_level" + current_chat],
-            }
-            save_data(st.session_state["path"], new_chat_name, st.session_state["history" + current_chat],
-                      st.session_state["paras"], st.session_state["contexts"])
+    if "apikey" in st.secrets:
+        st.session_state["paras"] = {
+            "temperature": st.session_state["temperature" + current_chat],
+            "top_p": st.session_state["top_p" + current_chat],
+            "presence_penalty": st.session_state["presence_penalty" + current_chat],
+            "frequency_penalty": st.session_state["frequency_penalty" + current_chat],
+        }
+        st.session_state["contexts"] = {
+            "context_select": st.session_state["context_select" + current_chat],
+            "context_input": st.session_state["context_input" + current_chat],
+            "context_level": st.session_state["context_level" + current_chat],
+        }
+        save_data(st.session_state["path"], new_chat_name, st.session_state["history" + current_chat],
+                  st.session_state["paras"], st.session_state["contexts"])
 
 
 def callback_fun(arg):
-    write_data()
-    st.session_state[arg + current_chat + "value"] = st.session_state[arg + current_chat]
+    # 连续快速点击新建与删除会触发错误回调，增加判断
+    if ("history" + current_chat in st.session_state) and ("frequency_penalty" + current_chat in st.session_state):
+        write_data()
+        st.session_state[arg + current_chat + "value"] = st.session_state[arg + current_chat]
 
 
 # 输入内容展示
@@ -135,12 +135,12 @@ with tap_context:
         label='补充或自定义上下文：', key="context_input" + current_chat,
         value=st.session_state['context_input' + current_chat + "value"],
         on_change=callback_fun, args=("context_input",))
-    st.caption(st.session_state['context_input' + current_chat])
 
 with tap_set:
     def clear_button_callback():
         st.session_state['history' + current_chat] = copy.deepcopy(initial_content_history)
         write_data()
+
 
     c1, c2 = st.columns(2)
     with c1:
@@ -195,6 +195,7 @@ with tap_input:
             if len(df_history.query('role!="system"')) == 0:
                 current_chat_index = st.session_state['history_chats'].index(current_chat)
                 new_name = extract_chars(user_input_content, 18) + '_' + str(uuid.uuid4())
+                new_name = filename_correction(new_name)
                 st.session_state['history_chats'][current_chat_index] = new_name
                 st.session_state["current_chat_index"] = current_chat_index
                 # 写入新文件
@@ -216,15 +217,17 @@ with tap_input:
         if 'r' in st.session_state:
             st.session_state.pop("r")
             st.session_state[current_chat + 'report'] = ""
-        st.session_state['pre_user_input_content'] = (remove_hashtag_right__space(st.session_state['user_input_content']
-                                                                                  .replace('\n', '\n\n')))
+        st.session_state['pre_user_input_content'] = url_correction(
+            remove_hashtag_right__space(st.session_state['user_input_content']
+                                        .replace('\n', '\n\n')))
         st.session_state['user_input_content'] = ''
+
         show_each_message(st.session_state['pre_user_input_content'], 'user',
                           [area_user_svg.markdown, area_user_content.markdown])
 
         context_level_tem = st.session_state['context_level' + current_chat]
-        history_need_input = get_history_input(st.session_state["history" + current_chat], context_level_tem) + \
-                             [{"role": "user", "content": st.session_state['pre_user_input_content']}]
+        history_need_input = (get_history_input(st.session_state["history" + current_chat], context_level_tem) +
+                              [{"role": "user", "content": st.session_state['pre_user_input_content']}])
         for ctx in [st.session_state['context_input' + current_chat],
                     set_context_all[st.session_state['context_select' + current_chat]]]:
             if ctx != "":
@@ -281,7 +284,7 @@ if ("r" in st.session_state) and (current_chat == st.session_state["chat_of_r"])
         st.session_state["history" + current_chat].append(
             {"role": "user", "content": st.session_state['pre_user_input_content']})
         st.session_state["history" + current_chat].append(
-            {"role": "assistant", "content": st.session_state[current_chat + 'report']})
+            {"role": "assistant", "content": url_correction(st.session_state[current_chat + 'report'])})
         write_data()
 
     # 用户在网页点击stop时，ss某些情形下会暂时为空
@@ -289,7 +292,7 @@ if ("r" in st.session_state) and (current_chat == st.session_state["chat_of_r"])
         st.session_state.pop(current_chat + 'report')
     if 'r' in st.session_state:
         st.session_state.pop("r")
-    st.experimental_rerun()
+        st.experimental_rerun()
 
 # 添加事件监听
 v1.html(js_code, height=0)
