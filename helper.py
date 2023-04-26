@@ -137,7 +137,7 @@ def filename_correction(filename: str) -> str:
 
 
 def url_correction(text: str) -> str:
-    pattern = r'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+#]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+'
+    pattern = r'(?:http[s]?://|www\.)(?:[a-zA-Z]|[0-9]|[$-_@.&+#]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+'
     links = re.findall(pattern, text)
     for link in links:
         text = text.replace(link, " " + link + " ")
