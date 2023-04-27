@@ -207,7 +207,7 @@ with tap_input:
 
 
     with st.form("input_form", clear_on_submit=True):
-        user_input = st.text_area("**输入：**", key="user_input_area")
+        user_input = st.text_area("**输入：**", key="user_input_area", help="内容将以Markdown格式在页面展示")
         submitted = st.form_submit_button("确认提交", use_container_width=True, on_click=input_callback)
     if submitted:
         st.session_state['user_input_content'] = user_input
@@ -216,9 +216,7 @@ with tap_input:
         if 'r' in st.session_state:
             st.session_state.pop("r")
             st.session_state[current_chat + 'report'] = ""
-        st.session_state['pre_user_input_content'] = url_correction(
-            remove_hashtag_right__space(st.session_state['user_input_content']
-                                        .replace('\n', '\n\n')))
+        st.session_state['pre_user_input_content'] = st.session_state['user_input_content']
         st.session_state['user_input_content'] = ''
 
         show_each_message(st.session_state['pre_user_input_content'], 'user',
@@ -283,7 +281,7 @@ if ("r" in st.session_state) and (current_chat == st.session_state["chat_of_r"])
         st.session_state["history" + current_chat].append(
             {"role": "user", "content": st.session_state['pre_user_input_content']})
         st.session_state["history" + current_chat].append(
-            {"role": "assistant", "content": url_correction(st.session_state[current_chat + 'report'])})
+            {"role": "assistant", "content": st.session_state[current_chat + 'report']})
         write_data()
 
     # 用户在网页点击stop时，ss某些情形下会暂时为空

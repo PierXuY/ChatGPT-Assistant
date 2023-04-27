@@ -69,6 +69,10 @@ def show_each_message(message: str, role: str, area=None):
         icon = gpt_svg
         name = gpt_name
         background_color = gpt_background_color
+    # \:是streamlit中的转义语法
+    message = (url_correction(message)
+               .replace('\n', '\n\n')
+               .replace(':', '\:'))
     area[0](f"\n<div class='avatar'>{icon}<h2>{name}：</h2></div>", unsafe_allow_html=True)
     area[1](f"""<div class='content-div' style='background-color: {background_color};'>\n\n{message}""",
             unsafe_allow_html=True)
@@ -96,9 +100,9 @@ def get_history_input(history: list, level: int) -> list:
 
 
 # 去除#号右边的空格
-def remove_hashtag_right__space(text: str) -> str:
-    res = re.sub(r"(#+)\s*", r"\1", text)
-    return res
+# def remove_hashtag_right__space(text: str) -> str:
+#     text = re.sub(r"(#+)\s*", r"\1", text)
+#     return text
 
 
 # 提取文本
