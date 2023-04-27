@@ -71,7 +71,6 @@ def show_each_message(message: str, role: str, area=None):
         background_color = gpt_background_color
     # \:是streamlit中的转义语法
     message = (url_correction(message)
-               .replace('\n', '\n\n')
                .replace(':', '\:'))
     area[0](f"\n<div class='avatar'>{icon}<h2>{name}：</h2></div>", unsafe_allow_html=True)
     area[1](f"""<div class='content-div' style='background-color: {background_color};'>\n\n{message}""",
