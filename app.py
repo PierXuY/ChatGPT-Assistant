@@ -106,7 +106,7 @@ with st.sidebar:
         st.experimental_rerun()
 
     st.write("\n")
-    st.text_input("设定窗口名称：", key="set_chat_name")
+    st.text_input("设定窗口名称：", key="set_chat_name", placeholder="点击输入")
     st.write("\n")
     st.write("\n")
     st.caption("""
