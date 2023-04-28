@@ -122,7 +122,6 @@ def extract_chars(text: str, num: int) -> str:
 
 @st.cache_data(max_entries=20, show_spinner=False)
 def download_history(history: list):
-    print("执行")
     md_text = ""
     for msg in history:
         if msg['role'] == 'user':

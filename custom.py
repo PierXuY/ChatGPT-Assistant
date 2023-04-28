@@ -174,5 +174,20 @@ js_code = """
             waitForLayout();
         });
     });
+    
+    // 设置 Tab 键
+    textinput.addEventListener('keydown', function (event) {
+        if (event.keyCode === 9) {
+            // 阻止默认行为
+            event.preventDefault();
+            // 获取当前光标位置
+            const start = this.selectionStart;
+            const end = this.selectionEnd;
+            // 在光标位置插入制表符
+            this.value = this.value.substring(0, start) + '\t' + this.value.substring(end);
+            // 将光标移动到插入的制表符之后
+            this.selectionStart = this.selectionEnd = start + 1;
+        }
+    });
 </script>
 """
