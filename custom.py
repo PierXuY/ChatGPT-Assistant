@@ -51,7 +51,7 @@ css_code = """
     }
     section[data-testid="stSidebar"] .stRadio {
         overflow: overlay;
-        height: 30vh;
+        height: 28vh;
         }
     .avatar {
         display: flex;
