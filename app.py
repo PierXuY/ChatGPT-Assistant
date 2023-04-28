@@ -57,8 +57,9 @@ def write_data(new_chat_name=current_chat):
 def reset_chat_name_fun(chat_name):
     chat_name = chat_name + '_' + str(uuid.uuid4())
     new_name = filename_correction(chat_name)
-    st.session_state['history_chats'][st.session_state["current_chat_index"]] = new_name
-    st.session_state["current_chat_index"] = st.session_state["current_chat_index"]
+    current_chat_index = st.session_state['history_chats'].index(current_chat)
+    st.session_state['history_chats'][current_chat_index] = new_name
+    st.session_state["current_chat_index"] = current_chat_index
     # 写入新文件
     write_data(new_name)
     # 转移数据
