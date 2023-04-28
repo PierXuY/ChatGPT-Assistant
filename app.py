@@ -313,4 +313,3 @@ if ("r" in st.session_state) and (current_chat == st.session_state["chat_of_r"])
         st.session_state.pop(current_chat + 'report')
     if 'r' in st.session_state:
         st.session_state.pop("r")
-        st.experimental_rerun()
