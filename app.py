@@ -35,30 +35,79 @@ with st.sidebar:
     )
     st.write("---")
 
-    c1, c2 = st.columns(2)
 
+# 数据写入文件
+def write_data(new_chat_name=current_chat):
+    if "apikey" in st.secrets:
+        st.session_state["paras"] = {
+            "temperature": st.session_state["temperature" + current_chat],
+            "top_p": st.session_state["top_p" + current_chat],
+            "presence_penalty": st.session_state["presence_penalty" + current_chat],
+            "frequency_penalty": st.session_state["frequency_penalty" + current_chat],
+        }
+        st.session_state["contexts"] = {
+            "context_select": st.session_state["context_select" + current_chat],
+            "context_input": st.session_state["context_input" + current_chat],
+            "context_level": st.session_state["context_level" + current_chat],
+        }
+        save_data(st.session_state["path"], new_chat_name, st.session_state["history" + current_chat],
+                  st.session_state["paras"], st.session_state["contexts"])
+
+
+def reset_chat_name_fun(chat_name):
+    chat_name = chat_name + '_' + str(uuid.uuid4())
+    new_name = filename_correction(chat_name)
+    st.session_state['history_chats'][st.session_state["current_chat_index"]] = new_name
+    st.session_state["current_chat_index"] = st.session_state["current_chat_index"]
+    # 写入新文件
+    write_data(new_name)
+    # 转移数据
+    st.session_state['history' + new_name] = st.session_state['history' + current_chat]
+    for item in ["context_select", "context_input", "context_level", *initial_content_all['paras']]:
+        st.session_state[item + new_name + "value"] = st.session_state[item + current_chat + "value"]
+    remove_data(st.session_state["path"], current_chat)
+
+
+def create_chat_fun():
+    st.session_state['history_chats'] = ['New Chat_' + str(uuid.uuid4())] + st.session_state['history_chats']
+    st.session_state["current_chat_index"] = 0
+
+
+def delete_chat_fun():
+    if len(st.session_state['history_chats']) == 1:
+        chat_init = 'New Chat_' + str(uuid.uuid4())
+        st.session_state['history_chats'].append(chat_init)
+    pre_chat_index = st.session_state['history_chats'].index(current_chat)
+    if pre_chat_index > 0:
+        st.session_state["current_chat_index"] = st.session_state['history_chats'].index(current_chat) - 1
+    else:
+        st.session_state["current_chat_index"] = 0
+    st.session_state['history_chats'].remove(current_chat)
+    remove_data(st.session_state["path"], current_chat)
+
+
+with st.sidebar:
+    c1, c2 = st.columns(2)
     create_chat_button = c1.button('新建', use_container_width=True, key='create_chat_button')
     if create_chat_button:
-        st.session_state['history_chats'] = ['New Chat_' + str(uuid.uuid4())] + st.session_state['history_chats']
-        st.session_state["current_chat_index"] = 0
+        create_chat_fun()
         st.experimental_rerun()
 
     delete_chat_button = c2.button('删除', use_container_width=True, key='delete_chat_button')
     if delete_chat_button:
-        if len(st.session_state['history_chats']) == 1:
-            chat_init = 'New Chat_' + str(uuid.uuid4())
-            st.session_state['history_chats'].append(chat_init)
-        pre_chat_index = st.session_state['history_chats'].index(current_chat)
-        if pre_chat_index > 0:
-            st.session_state["current_chat_index"] = st.session_state['history_chats'].index(current_chat) - 1
-        else:
-            st.session_state["current_chat_index"] = 0
-        st.session_state['history_chats'].remove(current_chat)
-        remove_data(st.session_state["path"], current_chat)
+        delete_chat_fun()
         st.experimental_rerun()
 
-    for i in range(5):
-        st.write("\n")
+with st.sidebar:
+    if ("set_chat_name" in st.session_state) and st.session_state['set_chat_name'] != '':
+        reset_chat_name_fun(st.session_state['set_chat_name'])
+        st.session_state['set_chat_name'] = ''
+        st.experimental_rerun()
+
+    st.write("\n")
+    st.text_input("设定窗口名称：", key="set_chat_name")
+    st.write("\n")
+    st.write("\n")
     st.caption("""
     - 双击页面可直接定位输入栏
     - Ctrl + Enter 可快捷提交问题
@@ -80,29 +129,16 @@ if "history" + current_chat not in st.session_state:
 show_messages(st.session_state["history" + current_chat])
 
 
-# 数据写入文件
-def write_data(new_chat_name=current_chat):
-    if "apikey" in st.secrets:
-        st.session_state["paras"] = {
-            "temperature": st.session_state["temperature" + current_chat],
-            "top_p": st.session_state["top_p" + current_chat],
-            "presence_penalty": st.session_state["presence_penalty" + current_chat],
-            "frequency_penalty": st.session_state["frequency_penalty" + current_chat],
-        }
-        st.session_state["contexts"] = {
-            "context_select": st.session_state["context_select" + current_chat],
-            "context_input": st.session_state["context_input" + current_chat],
-            "context_level": st.session_state["context_level" + current_chat],
-        }
-        save_data(st.session_state["path"], new_chat_name, st.session_state["history" + current_chat],
-                  st.session_state["paras"], st.session_state["contexts"])
-
-
 def callback_fun(arg):
     # 连续快速点击新建与删除会触发错误回调，增加判断
     if ("history" + current_chat in st.session_state) and ("frequency_penalty" + current_chat in st.session_state):
         write_data()
         st.session_state[arg + current_chat + "value"] = st.session_state[arg + current_chat]
+
+
+def clear_button_callback():
+    st.session_state['history' + current_chat] = copy.deepcopy(initial_content_history)
+    write_data()
 
 
 # 输入内容展示
@@ -136,11 +172,6 @@ with tap_context:
         on_change=callback_fun, args=("context_input",))
 
 with tap_set:
-    def clear_button_callback():
-        st.session_state['history' + current_chat] = copy.deepcopy(initial_content_history)
-        write_data()
-
-
     c1, c2 = st.columns(2)
     with c1:
         st.button("清空聊天记录", use_container_width=True, on_click=clear_button_callback)
@@ -191,20 +222,9 @@ with tap_input:
             # 修改窗口名称
             user_input_content = st.session_state['user_input_area']
             df_history = pd.DataFrame(st.session_state["history" + current_chat])
-            if len(df_history.query('role!="system"')) == 0:
-                current_chat_index = st.session_state['history_chats'].index(current_chat)
-                new_name = extract_chars(user_input_content, 18) + '_' + str(uuid.uuid4())
-                new_name = filename_correction(new_name)
-                st.session_state['history_chats'][current_chat_index] = new_name
-                st.session_state["current_chat_index"] = current_chat_index
-                # 写入新文件
-                write_data(new_name)
-                # 转移数据
-                st.session_state['history' + new_name] = st.session_state['history' + current_chat]
-                for item in ["context_select", "context_input", "context_level", *initial_content_all['paras']]:
-                    st.session_state[item + new_name + "value"] = st.session_state[item + current_chat + "value"]
-                remove_data(st.session_state["path"], current_chat)
-
+            if (len(df_history.query('role!="system"')) == 0) and (current_chat.split('_')[0] == 'New Chat'):
+                new_name = extract_chars(user_input_content, 18)
+                reset_chat_name_fun(new_name)
 
     with st.form("input_form", clear_on_submit=True):
         user_input = st.text_area("**输入：**", key="user_input_area", help="内容将以Markdown格式在页面展示")
@@ -212,53 +232,57 @@ with tap_input:
     if submitted:
         st.session_state['user_input_content'] = user_input
 
-    if st.session_state['user_input_content'] != '':
-        if 'r' in st.session_state:
-            st.session_state.pop("r")
-            st.session_state[current_chat + 'report'] = ""
-        st.session_state['pre_user_input_content'] = st.session_state['user_input_content']
-        st.session_state['user_input_content'] = ''
+# 添加事件监听
+v1.html(js_code, height=0)
 
-        show_each_message(st.session_state['pre_user_input_content'], 'user',
-                          [area_user_svg.markdown, area_user_content.markdown])
-
-        context_level_tem = st.session_state['context_level' + current_chat]
-        history_need_input = (get_history_input(st.session_state["history" + current_chat], context_level_tem) +
-                              [{"role": "user", "content": st.session_state['pre_user_input_content']}])
-        for ctx in [st.session_state['context_input' + current_chat],
-                    set_context_all[st.session_state['context_select' + current_chat]]]:
-            if ctx != "":
-                history_need_input = [{"role": "system", "content": ctx}] + history_need_input
-
-        paras_need_input = {
-            "temperature": st.session_state["temperature" + current_chat],
-            "top_p": st.session_state["top_p" + current_chat],
-            "presence_penalty": st.session_state["presence_penalty" + current_chat],
-            "frequency_penalty": st.session_state["frequency_penalty" + current_chat],
-        }
-        with st.spinner("🤔"):
-            try:
-                if apikey := st.session_state['apikey_input']:
-                    openai.api_key = apikey
-                else:
-                    openai.api_key = st.secrets["apikey"]
-                r = openai.ChatCompletion.create(model=model, messages=history_need_input, stream=True,
-                                                 **paras_need_input)
-            except (FileNotFoundError, KeyError):
-                area_error.error("缺失 OpenAI API Key，请在复制项目后配置Secrets，或者在设置中进行临时配置。"
-                                 "详情见[项目仓库](https://github.com/PierXuY/ChatGPT-Assistant)。")
-            except openai.error.AuthenticationError:
-                area_error.error("无效的 OpenAI API Key。")
-            except openai.error.APIConnectionError as e:
-                area_error.error("连接超时，请重试。报错：   \n" + str(e.args[0]))
-            except openai.error.InvalidRequestError as e:
-                area_error.error("无效的请求，请重试。报错：   \n" + str(e.args[0]))
-            except openai.error.RateLimitError as e:
-                area_error.error("请求速率过快，请重试。报错：   \n" + str(e.args[0]))
+if st.session_state['user_input_content'] != '':
+    if 'r' in st.session_state:
+        st.session_state.pop("r")
+        st.session_state[current_chat + 'report'] = ""
+    st.session_state['pre_user_input_content'] = st.session_state['user_input_content']
+    st.session_state['user_input_content'] = ''
+    # 临时展示
+    show_each_message(st.session_state['pre_user_input_content'], 'user',
+                      [area_user_svg.markdown, area_user_content.markdown])
+    # 需输入的历史记录
+    context_level_tem = st.session_state['context_level' + current_chat]
+    history_need_input = (get_history_input(st.session_state["history" + current_chat], context_level_tem) +
+                          [{"role": "user", "content": st.session_state['pre_user_input_content']}])
+    for ctx in [st.session_state['context_input' + current_chat],
+                set_context_all[st.session_state['context_select' + current_chat]]]:
+        if ctx != "":
+            history_need_input = [{"role": "system", "content": ctx}] + history_need_input
+    # 设定的模型参数
+    paras_need_input = {
+        "temperature": st.session_state["temperature" + current_chat],
+        "top_p": st.session_state["top_p" + current_chat],
+        "presence_penalty": st.session_state["presence_penalty" + current_chat],
+        "frequency_penalty": st.session_state["frequency_penalty" + current_chat],
+    }
+    # 调用接口
+    with st.spinner("🤔"):
+        try:
+            if apikey := st.session_state['apikey_input']:
+                openai.api_key = apikey
             else:
-                st.session_state["chat_of_r"] = current_chat
-                st.session_state["r"] = r
-                st.experimental_rerun()
+                openai.api_key = st.secrets["apikey"]
+            r = openai.ChatCompletion.create(model=model, messages=history_need_input, stream=True,
+                                             **paras_need_input)
+        except (FileNotFoundError, KeyError):
+            area_error.error("缺失 OpenAI API Key，请在复制项目后配置Secrets，或者在设置中进行临时配置。"
+                             "详情见[项目仓库](https://github.com/PierXuY/ChatGPT-Assistant)。")
+        except openai.error.AuthenticationError:
+            area_error.error("无效的 OpenAI API Key。")
+        except openai.error.APIConnectionError as e:
+            area_error.error("连接超时，请重试。报错：   \n" + str(e.args[0]))
+        except openai.error.InvalidRequestError as e:
+            area_error.error("无效的请求，请重试。报错：   \n" + str(e.args[0]))
+        except openai.error.RateLimitError as e:
+            area_error.error("请求速率过快，请重试。报错：   \n" + str(e.args[0]))
+        else:
+            st.session_state["chat_of_r"] = current_chat
+            st.session_state["r"] = r
+            st.experimental_rerun()
 
 if ("r" in st.session_state) and (current_chat == st.session_state["chat_of_r"]):
     if current_chat + 'report' not in st.session_state:
@@ -283,13 +307,9 @@ if ("r" in st.session_state) and (current_chat == st.session_state["chat_of_r"])
         st.session_state["history" + current_chat].append(
             {"role": "assistant", "content": st.session_state[current_chat + 'report']})
         write_data()
-
     # 用户在网页点击stop时，ss某些情形下会暂时为空
     if current_chat + 'report' in st.session_state:
         st.session_state.pop(current_chat + 'report')
     if 'r' in st.session_state:
         st.session_state.pop("r")
         st.experimental_rerun()
-
-# 添加事件监听
-v1.html(js_code, height=0)

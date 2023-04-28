@@ -12,7 +12,7 @@ gpt_svg = """
 """
 # 内容背景
 user_background_color = ''
-gpt_background_color = 'rgba(225, 231, 235, 0.5)'
+gpt_background_color = 'rgba(225, 230, 235, 0.5)'
 # 模型初始设置
 model = "gpt-3.5-turbo"
 initial_content_history = [{"role": 'system',
@@ -108,7 +108,7 @@ js_code = """
             textinput.focus();
         } else {
             tabs[0].click();
-            const waitMs = 1;
+            const waitMs = 10;
             
             function waitForFocus() {
                 if (window.parent.document.activeElement === textinput) {
@@ -162,7 +162,7 @@ js_code = """
     
             let element = tab_panels[index].querySelector('div[data-testid="stVerticalBlock"]');
             let main_block = window.parent.document.querySelector('section.main div[data-testid="stVerticalBlock"]');
-            const waitMs = 30;
+            const waitMs = 10;
     
             function waitForLayout() {
                 if (element.offsetWidth === main_block.offsetWidth) {

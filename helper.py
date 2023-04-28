@@ -69,7 +69,9 @@ def show_each_message(message: str, role: str, area=None):
         icon = gpt_svg
         name = gpt_name
         background_color = gpt_background_color
-    message = url_correction(message)
+    message = colon_correction(
+        url_correction(message)
+    )
     area[0](f"\n<div class='avatar'>{icon}<h2>{name}：</h2></div>", unsafe_allow_html=True)
     area[1](f"""<div class='content-div' style='background-color: {background_color};'>\n\n{message}""",
             unsafe_allow_html=True)
@@ -118,7 +120,9 @@ def extract_chars(text: str, num: int) -> str:
     return chars
 
 
+@st.cache_data(max_entries=20, show_spinner=False)
 def download_history(history: list):
+    print("执行")
     md_text = ""
     for msg in history:
         if msg['role'] == 'user':
@@ -140,4 +144,15 @@ def filename_correction(filename: str) -> str:
 def url_correction(text: str) -> str:
     pattern = r'((?:http[s]?://|www\.)(?:[a-zA-Z0-9]|[$-_\~#!])+)'
     text = re.sub(pattern, r' \g<1> ', text)
+    return text
+
+
+# st的markdown会错误渲染英文引号加英文字符，例如 :abc
+def colon_correction(text):
+    pattern = r':[a-zA-Z]'
+    if re.search(pattern, text):
+        text = text.replace(":", "&#58;")
+        pattern = r'`([^`]*)&#58;([^`]*)`|```([^`]*)&#58;([^`]*)```'
+        text = re.sub(pattern, lambda m: m.group(0).replace('&#58;', ':') if '&#58;' in m.group(0) else m.group(0),
+                      text)
     return text
