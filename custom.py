@@ -37,7 +37,7 @@ set_context_all.update(set_context)
 css_code = """
     <style>
     section[data-testid="stSidebar"]>div>div:nth-child(2) {
-        padding-top: 1.3rem !important;
+        padding-top: 0.5rem !important;
         }
     section.main>div{
         padding-top: 20px;
