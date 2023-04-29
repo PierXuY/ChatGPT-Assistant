@@ -46,7 +46,7 @@ css_code = """
         text-shadow: 2px 2px #ccc;
         font-size: 28px !important; 
         font-family: "微软雅黑","auto";
-        margin-bottom: 5px;
+        margin-bottom: 10px;
         font-weight: 500 !important;
     }
     section[data-testid="stSidebar"] .stRadio {
