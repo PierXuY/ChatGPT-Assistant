@@ -228,6 +228,7 @@ with tap_input:
                 new_name = extract_chars(user_input_content, 18)
                 reset_chat_name_fun(new_name)
 
+
     with st.form("input_form", clear_on_submit=True):
         user_input = st.text_area("**输入：**", key="user_input_area", help="内容将以Markdown格式在页面展示")
         submitted = st.form_submit_button("确认提交", use_container_width=True, on_click=input_callback)
@@ -236,6 +237,26 @@ with tap_input:
 
 # 添加事件监听
 v1.html(js_code, height=0)
+
+
+def get_model_input():
+    # 需输入的历史记录
+    context_level = st.session_state['context_level' + current_chat]
+    history = (get_history_input(st.session_state["history" + current_chat], context_level) +
+               [{"role": "user", "content": st.session_state['pre_user_input_content']}])
+    for ctx in [st.session_state['context_input' + current_chat],
+                set_context_all[st.session_state['context_select' + current_chat]]]:
+        if ctx != "":
+            history = [{"role": "system", "content": ctx}] + history
+    # 设定的模型参数
+    paras = {
+        "temperature": st.session_state["temperature" + current_chat],
+        "top_p": st.session_state["top_p" + current_chat],
+        "presence_penalty": st.session_state["presence_penalty" + current_chat],
+        "frequency_penalty": st.session_state["frequency_penalty" + current_chat],
+    }
+    return history, paras
+
 
 if st.session_state['user_input_content'] != '':
     if 'r' in st.session_state:
@@ -246,21 +267,8 @@ if st.session_state['user_input_content'] != '':
     # 临时展示
     show_each_message(st.session_state['pre_user_input_content'], 'user',
                       [area_user_svg.markdown, area_user_content.markdown])
-    # 需输入的历史记录
-    context_level_tem = st.session_state['context_level' + current_chat]
-    history_need_input = (get_history_input(st.session_state["history" + current_chat], context_level_tem) +
-                          [{"role": "user", "content": st.session_state['pre_user_input_content']}])
-    for ctx in [st.session_state['context_input' + current_chat],
-                set_context_all[st.session_state['context_select' + current_chat]]]:
-        if ctx != "":
-            history_need_input = [{"role": "system", "content": ctx}] + history_need_input
-    # 设定的模型参数
-    paras_need_input = {
-        "temperature": st.session_state["temperature" + current_chat],
-        "top_p": st.session_state["top_p" + current_chat],
-        "presence_penalty": st.session_state["presence_penalty" + current_chat],
-        "frequency_penalty": st.session_state["frequency_penalty" + current_chat],
-    }
+    # 模型输入
+    history_need_input, paras_need_input = get_model_input()
     # 调用接口
     with st.spinner("🤔"):
         try:

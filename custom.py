@@ -46,7 +46,7 @@ css_code = """
         text-shadow: 2px 2px #ccc;
         font-size: 28px !important; 
         font-family: "微软雅黑","auto";
-        margin-bottom: 8px;
+        margin-bottom: 6px;
         font-weight: 500 !important;
     }
     section[data-testid="stSidebar"] .stRadio {
@@ -180,13 +180,15 @@ js_code = """
         if (event.keyCode === 9) {
             // 阻止默认行为
             event.preventDefault();
-            // 获取当前光标位置
-            const start = this.selectionStart;
-            const end = this.selectionEnd;
-            // 在光标位置插入制表符
-            this.value = this.value.substring(0, start) + '\t' + this.value.substring(end);
-            // 将光标移动到插入的制表符之后
-            this.selectionStart = this.selectionEnd = start + 1;
+            if (!window.parent.getSelection().toString()) {
+                // 获取当前光标位置
+                const start = this.selectionStart;
+                const end = this.selectionEnd;
+                // 在光标位置插入制表符
+                this.value = this.value.substring(0, start) + '\t' + this.value.substring(end);
+                // 将光标移动到插入的制表符之后
+                this.selectionStart = this.selectionEnd = start + 1;
+            }
         }
     });
 </script>
