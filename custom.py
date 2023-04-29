@@ -37,7 +37,7 @@ set_context_all.update(set_context)
 css_code = """
     <style>
     section[data-testid="stSidebar"]>div>div:nth-child(2) {
-        padding-top: 0.5rem !important;
+        padding-top: 0.75rem !important;
         }
     section.main>div{
         padding-top: 20px;
@@ -46,7 +46,7 @@ css_code = """
         text-shadow: 2px 2px #ccc;
         font-size: 28px !important; 
         font-family: "微软雅黑","auto";
-        margin-bottom: 10px;
+        margin-bottom: 8px;
         font-weight: 500 !important;
     }
     section[data-testid="stSidebar"] .stRadio {
