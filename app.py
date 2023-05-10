@@ -108,7 +108,7 @@ with st.sidebar:
     st.write("\n")
     st.write("\n")
     st.text_input("设定窗口名称：", key="set_chat_name", placeholder="点击输入")
-    st.write("\n")
+    st.selectbox("选择模型：", index=0, options=['gpt-3.5-turbo', 'gpt-4'], key="select_model")
     st.write("\n")
     st.caption("""
     - 双击页面可直接定位输入栏
@@ -235,10 +235,6 @@ with tap_input:
     if submitted:
         st.session_state['user_input_content'] = user_input
 
-# 添加事件监听
-v1.html(js_code, height=0)
-
-
 def get_model_input():
     # 需输入的历史记录
     context_level = st.session_state['context_level' + current_chat]
@@ -276,7 +272,7 @@ if st.session_state['user_input_content'] != '':
                 openai.api_key = apikey
             else:
                 openai.api_key = st.secrets["apikey"]
-            r = openai.ChatCompletion.create(model=model, messages=history_need_input, stream=True,
+            r = openai.ChatCompletion.create(model=st.session_state["select_model"], messages=history_need_input, stream=True,
                                              **paras_need_input)
         except (FileNotFoundError, KeyError):
             area_error.error("缺失 OpenAI API Key，请在复制项目后配置Secrets，或者在设置中进行临时配置。"
@@ -323,3 +319,6 @@ if ("r" in st.session_state) and (current_chat == st.session_state["chat_of_r"])
     if 'r' in st.session_state:
         st.session_state.pop("r")
         st.experimental_rerun()
+
+# 添加事件监听
+v1.html(js_code, height=0)
