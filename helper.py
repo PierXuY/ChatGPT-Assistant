@@ -7,6 +7,7 @@ import pandas as pd
 from custom import *
 import copy
 import io
+from text_toolkit import text_toolkit
 
 
 def get_history_chats(path: str) -> list:
@@ -58,29 +59,45 @@ def load_data(path: str, file_name: str) -> dict:
         return content
 
 
-def show_each_message(message: str, role: str, area=None):
+def show_each_message(message: str, role: str, idr: str, area=None):
     if area is None:
         area = [st.markdown] * 2
     if role == 'user':
         icon = user_svg
         name = user_name
         background_color = user_background_color
+        data_idr = idr + "_user"
+        class_name = 'user'
     else:
         icon = gpt_svg
         name = gpt_name
         background_color = gpt_background_color
-    message = colon_correction(
-        url_correction(message)
-    )
+        data_idr = idr + "_assistant"
+        class_name = 'assistant'
+    message = url_correction(message)
     area[0](f"\n<div class='avatar'>{icon}<h2>{name}：</h2></div>", unsafe_allow_html=True)
-    area[1](f"""<div class='content-div' style='background-color: {background_color};'>\n\n{message}""",
-            unsafe_allow_html=True)
+    area[1](
+        f"""<div class='content-div {class_name}' data-idr='{data_idr}' style='background-color: {background_color};'>\n\n{message}""",
+        unsafe_allow_html=True)
 
 
-def show_messages(messages: list):
+def show_messages(current_chat: str, messages: list):
+    id_role = 0
+    id_assistant = 0
     for each in messages:
-        if (each["role"] == "user") or (each["role"] == "assistant"):
-            show_each_message(each["content"], each["role"])
+        if each["role"] == "user":
+            idr = id_role
+            id_role += 1
+        elif each["role"] == "assistant":
+            idr = id_assistant
+            id_assistant += 1
+        else:
+            idr = False
+        if idr is not False:
+            show_each_message(each["content"], each["role"], str(idr))
+            if "open_text_toolkit_value" not in st.session_state or st.session_state["open_text_toolkit_value"]:
+                st.session_state['delete_dict'][current_chat + ">" + str(idr)] = text_toolkit(
+                    data_idr=str(idr) + '_' + each["role"])
         if each["role"] == "assistant":
             st.write("---")
 
@@ -145,13 +162,12 @@ def url_correction(text: str) -> str:
     text = re.sub(pattern, r' \g<1> ', text)
     return text
 
-
 # st的markdown会错误渲染英文引号加英文字符，例如 :abc
-def colon_correction(text):
-    pattern = r':[a-zA-Z]'
-    if re.search(pattern, text):
-        text = text.replace(":", "&#58;")
-        pattern = r'`([^`]*)&#58;([^`]*)`|```([^`]*)&#58;([^`]*)```'
-        text = re.sub(pattern, lambda m: m.group(0).replace('&#58;', ':') if '&#58;' in m.group(0) else m.group(0),
-                      text)
-    return text
+# def colon_correction(text):
+#     pattern = r':[a-zA-Z]'
+#     if re.search(pattern, text):
+#         text = text.replace(":", "&#58;")
+#         pattern = r'`([^`]*)&#58;([^`]*)`|```([^`]*)&#58;([^`]*)```'
+#         text = re.sub(pattern, lambda m: m.group(0).replace('&#58;', ':') if '&#58;' in m.group(0) else m.group(0),
+#                       text)
+#     return text

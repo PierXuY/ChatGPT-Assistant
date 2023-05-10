@@ -35,58 +35,88 @@ set_context_all.update(set_context)
 # 自定义css、js
 css_code = """
     <style>
-    section[data-testid="stSidebar"]>div>div:nth-child(2) {
+    section[data-testid="stSidebar"] > div > div:nth-child(2) {
         padding-top: 0.75rem !important;
-        }
-    section.main>div{
-        padding-top: 20px;
     }
-    section[data-testid="stSidebar"] h1{
+    
+    section.main > div {
+        padding-top: 10px;
+    }
+    
+    section[data-testid="stSidebar"] h1 {
         text-shadow: 2px 2px #ccc;
-        font-size: 28px !important; 
-        font-family: "微软雅黑","auto";
+        font-size: 28px !important;
+        font-family: "微软雅黑", "auto";
         margin-bottom: 6px;
         font-weight: 500 !important;
     }
+    
     section[data-testid="stSidebar"] .stRadio {
         overflow: overlay;
         height: 28vh;
-        }
+    }
+    
+    hr {
+        margin-top: 20px;
+        margin-bottom: 30px;
+    }
+    
     .avatar {
         display: flex;
         align-items: center;
         gap: 10px;
         pointer-events: none;
-        margin:10px;
+        margin: -8px 10px -16px;
     }
+    
     .avatar svg {
         width: 30px;
         height: 30px;
     }
+    
     .avatar h2 {
         font-size: 20px;
-        margin: 0px;
-    } 
+        margin: 0;
+    }
+    
     .content-div {
         padding: 5px 20px;
         margin: 5px;
         text-align: left;
         border-radius: 10px;
         border: none;
-        line-height: 1.6;   
-        font-size:17px; 
-        }
-    .content-div p{
+        line-height: 1.6;
+        font-size: 17px;
+    }
+    
+    .content-div.assistant p {
         padding: 4px;
-        margin : 2px;
-    } 
-    div[data-testid="stForm"]{
+        margin: 2px;
+    }
+    
+    .content-div.user p {
+        padding: 4px;
+        margin: -5px 2px -3px;
+    }
+    
+    div[data-testid="stForm"] {
         border: none;
         padding: 0;
     }
-    button[kind="primaryFormSubmit"]{
+    
+    button[kind="primaryFormSubmit"] {
         border: none;
         padding: 0;
+    }
+    
+    div[data-testid="stForm"] + div[data-testid="stHorizontalBlock"] div[data-baseweb="select"] > div:nth-child(1) {
+        background-color: transparent;
+        justify-content: center;
+        font-weight: 300;
+        border-radius: 0.25rem;
+        margin: 0;
+        line-height: 1.4;
+        border: 1px solid rgba(49, 51, 63, 0.2);
     }
     </style>
 """

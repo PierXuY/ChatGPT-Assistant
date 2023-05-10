@@ -1,0 +1,73 @@
+body {
+    margin: 0 25px;
+}
+
+/*sound*/
+.main button {
+    background-color: transparent;
+    border: none;
+    position: relative;
+    display: inline-block;
+    padding: 0 5px;
+    height: 21px;
+}
+
+.main::before {
+    content: attr(aria-label);
+    position: absolute;
+    top: calc(100% + 10px);
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 5px 10px;
+    /*background-color: #333;*/
+    /*color: #fff;*/
+    border-radius: 5px;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s;
+    writing-mode: horizontal-tb;
+    width: 100px;
+}
+
+.main:hover::before {
+    opacity: 1;
+    visibility: visible;
+}
+
+i {
+    color: #868e96;
+}
+
+i:hover {
+    color: #495057;
+}
+
+.fa-pause {
+    width: 10px;
+}
+
+.fa-play {
+    width: 10px;
+}
+
+#speed {
+    border: none;
+    outline: none;
+    border-radius: 5px;
+    background-color: #f2f2f2;
+    font-family: Arial, sans-serif;
+    color: #333;
+    width: auto;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+#speed:hover {
+    background-color: #e2e2e2;
+}
+
+#speed option {
+    display: inline-block;
+    padding: 0;
+    white-space: nowrap;
+    text-indent: 0;
+}

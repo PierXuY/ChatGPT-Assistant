@@ -1,0 +1,36 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href=" https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"/>
+    <link rel="stylesheet" href=" ./style.css"/>
+    <title></title>
+</head>
+<body>
+<div class="main">
+    <button id="copy-btn"><i class="fa-sharp fa-solid fa-paste"></i></button>
+    <button id="delete-btn" style="display: none"><i class="fa-sharp fa-solid fa-trash"></i></button>
+
+    <span class="sound">
+        <button class="btn-primary" id="play-btn" aria-label="播放"><i class="fas fa-volume-up"></i>
+        </button>
+        <button class="btn-primary" id="toggle-btn" aria-label="暂停/继续" style="display: none"><i
+                class="fas fa-pause"></i>
+        </button>
+        <button class="btn-danger" id="stop-btn" aria-label="停止" style="display: none"><i
+                class="fas fa-stop"></i>
+        </button>
+        <label for="speed"></label><select id="speed">
+        <option value=0.5>0.5x</option>
+        <option value=0.75>0.75x</option>
+        <option value=1 selected>1.0x</option>
+        <option value=1.25>1.25x</option>
+        <option value=1.5>1.5x</option>
+        <option value=2>2.0x</option>
+    </select>
+    </span>
+</div>
+<script src="./text_toolkit.js"></script>
+</body>
+</html>
+
+

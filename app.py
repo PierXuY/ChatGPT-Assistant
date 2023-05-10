@@ -6,6 +6,7 @@ import pandas as pd
 import openai
 from requests.models import ChunkedEncodingError
 from streamlit.components import v1
+from voice_toolkit import voice_toolkit
 
 st.set_page_config(page_title='ChatGPT Assistant', layout='wide', page_icon='🤖')
 # 自定义元素样式
@@ -16,23 +17,36 @@ if "initial_settings" not in st.session_state:
     st.session_state["path"] = 'history_chats_file'
     st.session_state['history_chats'] = get_history_chats(st.session_state["path"])
     # ss参数初始化
+    st.session_state['delete_dict'] = {}
+    st.session_state['delete_count'] = 0
+    st.session_state['voice_flag'] = ''
+    st.session_state['user_voice_value'] = ''
     st.session_state['error_info'] = ''
     st.session_state["current_chat_index"] = 0
     st.session_state['user_input_content'] = ''
+    # 读取全局设置
+    if os.path.exists('./set.json'):
+        with open('./set.json', 'r', encoding='utf-8') as f:
+            data_set = json.load(f)
+        for key, value in data_set.items():
+            st.session_state[key] = value
     # 设置完成
     st.session_state["initial_settings"] = True
 
 with st.sidebar:
     st.markdown("# 🤖 聊天窗口")
-    current_chat = st.radio(
-        label='历史聊天窗口',
-        format_func=lambda x: x.split('_')[0] if '_' in x else x,
-        options=st.session_state['history_chats'],
-        label_visibility='collapsed',
-        index=st.session_state["current_chat_index"],
-        key='current_chat' + st.session_state['history_chats'][st.session_state["current_chat_index"]],
-        # on_change=current_chat_callback  # 此处不适合用回调，无法识别到窗口增减的变动
-    )
+    # 创建容器的目的是配合自定义组件的监听操作
+    chat_container = st.container()
+    with chat_container:
+        current_chat = st.radio(
+            label='历史聊天窗口',
+            format_func=lambda x: x.split('_')[0] if '_' in x else x,
+            options=st.session_state['history_chats'],
+            label_visibility='collapsed',
+            index=st.session_state["current_chat_index"],
+            key='current_chat' + st.session_state['history_chats'][st.session_state["current_chat_index"]],
+            # on_change=current_chat_callback  # 此处不适合用回调，无法识别到窗口增减的变动
+        )
     st.write("---")
 
 
@@ -127,8 +141,30 @@ if "history" + current_chat not in st.session_state:
             for k, v in value.items():
                 st.session_state[k + current_chat + "value"] = v
 
+# 保证不同chat的页面层次一致，否则会导致自定义组件重新渲染
+container_show_messages = st.container()
+container_show_messages.write("")
 # 对话展示
-show_messages(st.session_state["history" + current_chat])
+with container_show_messages:
+    show_messages(current_chat, st.session_state["history" + current_chat])
+
+# 核查是否有对话需要删除
+if any(st.session_state['delete_dict'].values()):
+    for key, value in st.session_state['delete_dict'].items():
+        try:
+            deleteCount = value.get("deleteCount")
+        except AttributeError:
+            deleteCount = None
+        if deleteCount == st.session_state['delete_count']:
+            delete_keys = key
+            st.session_state['delete_count'] = deleteCount + 1
+            delete_current_chat, idr = delete_keys.split('>')
+            df_history_tem = pd.DataFrame(st.session_state["history" + delete_current_chat])
+            df_history_tem.drop(index=df_history_tem.query("role=='user'").iloc[[int(idr)], :].index, inplace=True)
+            df_history_tem.drop(index=df_history_tem.query("role=='assistant'").iloc[[int(idr)], :].index, inplace=True)
+            st.session_state["history" + delete_current_chat] = df_history_tem.to_dict('records')
+            write_data()
+            st.experimental_rerun()
 
 
 def callback_fun(arg):
@@ -143,6 +179,15 @@ def clear_button_callback():
     write_data()
 
 
+def save_set(arg):
+    st.session_state[arg + "_value"] = st.session_state[arg]
+    if "apikey" in st.secrets:
+        with open("./set.json", 'w', encoding='utf-8') as f:
+            json.dump({"open_text_toolkit_value": st.session_state["open_text_toolkit"],
+                       "open_voice_toolkit_value": st.session_state['open_voice_toolkit'],
+                       }, f)
+
+
 # 输入内容展示
 area_user_svg = st.empty()
 area_user_content = st.empty()
@@ -154,7 +199,7 @@ area_error = st.empty()
 
 st.write("\n")
 st.header('ChatGPT Assistant')
-tap_input, tap_context, tap_set = st.tabs(['💬 聊天', '🗒️ 预设', '⚙️ 设置'])
+tap_input, tap_context, tap_model, tab_func = st.tabs(['💬 聊天', '🗒️ 预设', '⚙️ 模型', '🛠️ 功能'])
 
 with tap_context:
     set_context_list = list(set_context_all.keys())
@@ -173,19 +218,7 @@ with tap_context:
         value=st.session_state['context_input' + current_chat + "value"],
         on_change=callback_fun, args=("context_input",))
 
-with tap_set:
-    c1, c2 = st.columns(2)
-    with c1:
-        st.button("清空聊天记录", use_container_width=True, on_click=clear_button_callback)
-    with c2:
-        btn = st.download_button(
-            label="导出聊天记录",
-            data=download_history(st.session_state['history' + current_chat]),
-            file_name=f'{current_chat.split("_")[0]}.md',
-            mime="text/markdown",
-            use_container_width=True
-        )
-
+with tap_model:
     st.markdown("OpenAI API Key (可选)")
     st.text_input("OpenAI API Key (可选)", type='password', key='apikey_input', label_visibility='collapsed')
     st.caption(
@@ -218,6 +251,36 @@ with tap_set:
               on_change=callback_fun, key='frequency_penalty' + current_chat, args=('frequency_penalty',))
     st.caption("[官网参数说明](https://platform.openai.com/docs/api-reference/completions/create)")
 
+with tab_func:
+    c1, c2 = st.columns(2)
+    with c1:
+        st.button("清空聊天记录", use_container_width=True, on_click=clear_button_callback)
+    with c2:
+        btn = st.download_button(
+            label="导出聊天记录",
+            data=download_history(st.session_state['history' + current_chat]),
+            file_name=f'{current_chat.split("_")[0]}.md',
+            mime="text/markdown",
+            use_container_width=True
+        )
+    st.write("\n")
+    st.markdown("自定义功能：")
+    c1, c2 = st.columns(2)
+    with c1:
+        if "open_text_toolkit_value" in st.session_state:
+            default = st.session_state["open_text_toolkit_value"]
+        else:
+            default = True
+        st.checkbox("开启文本下的功能组件", value=default, key='open_text_toolkit',
+                    on_change=save_set, args=("open_text_toolkit",))
+    with c2:
+        if "open_voice_toolkit_value" in st.session_state:
+            default = st.session_state["open_voice_toolkit_value"]
+        else:
+            default = True
+        st.checkbox("开启语音输入组件", value=default, key='open_voice_toolkit',
+                    on_change=save_set, args=('open_voice_toolkit',))
+
 with tap_input:
     def input_callback():
         if st.session_state['user_input_area'] != "":
@@ -230,10 +293,28 @@ with tap_input:
 
 
     with st.form("input_form", clear_on_submit=True):
-        user_input = st.text_area("**输入：**", key="user_input_area", help="内容将以Markdown格式在页面展示")
+        user_input = st.text_area("**输入：**", key="user_input_area",
+                                  help="内容将以Markdown格式在页面展示，建议遵循相关语言规范，同样有利于GPT正确读取，例如："
+                                       "\n- 代码块写在三个反引号内，并标注语言类型"
+                                       "\n- 以英文冒号开头的内容或者正则表达式等写在单反引号内",
+                                  value=st.session_state['user_voice_value'])
         submitted = st.form_submit_button("确认提交", use_container_width=True, on_click=input_callback)
     if submitted:
         st.session_state['user_input_content'] = user_input
+        st.session_state['user_voice_value'] = ''
+        st.experimental_rerun()
+
+    if "open_voice_toolkit_value" not in st.session_state or st.session_state["open_voice_toolkit_value"]:
+        # 语音输入功能
+        vocie_result = voice_toolkit()
+        # vocie_result会保存最后一次结果
+        if (vocie_result and vocie_result['voice_result']['flag'] == 'interim') or st.session_state['voice_flag'] == "interim":
+            st.session_state['voice_flag'] = 'interim'
+            st.session_state['user_voice_value'] = vocie_result['voice_result']['value']
+            if vocie_result['voice_result']['flag'] == 'final':
+                st.session_state['voice_flag'] = 'final'
+                st.experimental_rerun()
+
 
 def get_model_input():
     # 需输入的历史记录
@@ -261,7 +342,7 @@ if st.session_state['user_input_content'] != '':
     st.session_state['pre_user_input_content'] = st.session_state['user_input_content']
     st.session_state['user_input_content'] = ''
     # 临时展示
-    show_each_message(st.session_state['pre_user_input_content'], 'user',
+    show_each_message(st.session_state['pre_user_input_content'], 'user', 'tem',
                       [area_user_svg.markdown, area_user_content.markdown])
     # 模型输入
     history_need_input, paras_need_input = get_model_input()
@@ -272,10 +353,11 @@ if st.session_state['user_input_content'] != '':
                 openai.api_key = apikey
             else:
                 openai.api_key = st.secrets["apikey"]
-            r = openai.ChatCompletion.create(model=st.session_state["select_model"], messages=history_need_input, stream=True,
+            r = openai.ChatCompletion.create(model=st.session_state["select_model"], messages=history_need_input,
+                                             stream=True,
                                              **paras_need_input)
         except (FileNotFoundError, KeyError):
-            area_error.error("缺失 OpenAI API Key，请在复制项目后配置Secrets，或者在设置中进行临时配置。"
+            area_error.error("缺失 OpenAI API Key，请在复制项目后配置Secrets，或者在模型选项中进行临时配置。"
                              "详情见[项目仓库](https://github.com/PierXuY/ChatGPT-Assistant)。")
         except openai.error.AuthenticationError:
             area_error.error("无效的 OpenAI API Key。")
@@ -297,9 +379,9 @@ if ("r" in st.session_state) and (current_chat == st.session_state["chat_of_r"])
         for e in st.session_state["r"]:
             if "content" in e["choices"][0]["delta"]:
                 st.session_state[current_chat + 'report'] += e["choices"][0]["delta"]["content"]
-                show_each_message(st.session_state['pre_user_input_content'], 'user',
+                show_each_message(st.session_state['pre_user_input_content'], 'user', 'tem',
                                   [area_user_svg.markdown, area_user_content.markdown])
-                show_each_message(st.session_state[current_chat + 'report'], 'assistant',
+                show_each_message(st.session_state[current_chat + 'report'], 'assistant', 'tem',
                                   [area_gpt_svg.markdown, area_gpt_content.markdown])
     except ChunkedEncodingError:
         area_error.error("网络状况不佳，请刷新页面重试。")

@@ -1,0 +1,142 @@
+body {
+    margin: 0;
+}
+
+.voice-div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.voice-select-div {
+    display: flex;
+    justify-content: left;
+}
+
+#record-btn {
+    border-radius: 0.25rem;
+    margin: 0;
+    line-height: 1.4;
+    color: inherit;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.2rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    background-color: transparent;
+    border: 1px solid rgba(49, 51, 63, 0.2);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    user-select: none;
+    height: 40px;
+    width: 100%;
+}
+
+#record-btn:hover {
+    border-color: rgb(255, 75, 75);
+}
+
+#toggle-btn {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem 2rem;
+    height: 40px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    border: none;
+    text-transform: uppercase;
+    background-color: transparent;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    user-select: none;
+    margin: 0;
+    width: 20px;
+}
+
+#record-btn i {
+    margin-right: 0.5rem;
+}
+
+#record-btn:active i {
+    transform: scale(0.8);
+}
+
+#record-btn:active span {
+    opacity: 0;
+}
+
+#record-btn.recording {
+    background-color: transparent;
+    color: black;
+    box-shadow: inset 0 0 1.25rem red;
+}
+
+#record-btn.recording i {
+    animation: pulse 1s infinite;
+}
+
+#record-btn.recording span {
+    display: none;
+}
+
+select {
+    border: none;
+    border-radius: 0;
+    background-color: transparent;
+    box-shadow: none;
+    font-size: 16px;
+    padding: 10px 15px 10px 3px;
+    height: 40px;
+    color: #333;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    text-align: left;
+}
+
+select:focus {
+    box-shadow: none;
+    outline: none;
+}
+
+select:hover {
+    cursor: pointer;
+}
+
+
+#language-select, #voice-select {
+    display: inline-flex;
+    justify-content: left;
+    text-size-adjust: 100%;
+    font-size: 1rem;
+    transition-duration: 200ms;
+    padding: 6px 15px 6px 10px;
+    width: auto;
+    max-width: 100%;
+    white-space: nowrap;
+    box-sizing: border-box;
+    color: rgb(49, 51, 63);
+    transition-timing-function: cubic-bezier(0.2, 0.8, 0.4, 1);
+    overflow: hidden;
+    cursor: text;
+    transition-property: border, box-shadow, background-color;
+    background-color: transparent;
+    font-weight: 300;
+    border-radius: 0.25rem;
+    margin: 10px 0 10px 0;
+    line-height: 1.4;
+    border: 1px solid rgba(49, 51, 63, 0.2);
+}
+
+#voice-select {
+    margin-top: 5px;
+    width: 100%;
+}
+
+.select option {
+    display: inline-block;
+}
