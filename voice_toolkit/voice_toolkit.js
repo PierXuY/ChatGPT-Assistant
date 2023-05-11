@@ -71,13 +71,23 @@ window.speechSynthesis.onvoiceschanged = () => {
             if (!option.selected) {
                 if (option.value === localStorage.getItem(selectedLanguage + "selectedVoice")) {
                     option.selected = true;
-                } else if (option.value.includes("Natural")) {
-                    option.selected = true;
                 }
             }
             voiceSelectElement.add(option);
         }
     }
+
+    let localStorageVoice = localStorage.getItem(selectedLanguage + "selectedVoice")
+    for (let option of voiceSelectElement.options) {
+        if (option.value === localStorageVoice) {
+            option.selected = true;
+            break
+        } else if (!localStorageVoice && option.value.includes("Nature")) {
+            option.selected = true;
+            break
+        }
+    }
+
 
     if (voiceSelectElement.options.length === 0) {
         voiceSelectElement.style.display = "none";
@@ -118,7 +128,7 @@ window.speechSynthesis.onvoiceschanged = () => {
         window.parent.selectedVoiceName = voiceSelectElement.value
         localStorage.setItem(selectedLanguage + "selectedVoice", voiceSelectElement.value);
     });
-};
+}
 
 
 //// record.js
