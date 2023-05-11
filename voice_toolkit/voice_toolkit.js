@@ -177,13 +177,13 @@ function toggleRecording() {
                 return v.name === window.parent.selectedVoiceName;
             }).lang;
         }
-        // let zhLang = [["zh-CN", "cmn-Hans-CN"], ["zh-TW", "cmn-Hant-TW"], ["zh-HK", "yue-Hant-HK"]]
-        // for (let i = 0; i < zhLang.length; i++) {
-        //     if (recognition.lang === zhLang[i][0]) {
-        //         recognition.lang = zhLang[i][1]
-        //         break
-        //     }
-        // }
+        let zhLang = [["zh-CN", "cmn-Hans-CN"], ["zh-TW", "cmn-Hant-TW"], ["zh-HK", "yue-Hant-HK"]]
+        for (let i = 0; i < zhLang.length; i++) {
+            if (recognition.lang === zhLang[i][0]) {
+                recognition.lang = zhLang[i][1]
+                break
+            }
+        }
         recognition.start();
     } else {
         recognition.stop();
