@@ -185,6 +185,48 @@ speedSelect.addEventListener('change', () => {
     }
 });
 
+// 监听页面切换chat
+function checkChatRadioBlock() {
+    const stChatRadioBlock = window.parent.document.querySelector('section[data-testid="stSidebar"] div[data-testid="stVerticalBlock"] div[data-testid="stVerticalBlock"]:has(div[role="radiogroup"])');
+    if (stChatRadioBlock) {
+        const config = {
+            attributes: true,
+            subtree: true
+        };
+        // 创建MutationObserver实例
+        const observer = new MutationObserver((mutationsList, observer) => {
+            // 监控到变化时的回调函数
+            for (let mutation of mutationsList) {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'tabindex') {
+                    clearTimeout(TIMEOUT_KEEP_SYNTHESIS_WORKING);
+                }
+            }
+        });
+        // 启动MutationObserver
+        observer.observe(stChatRadioBlock, config);
+    } else {
+        setTimeout(checkChatRadioBlock, 500);
+    }
+}
+
+checkChatRadioBlock()
+
+// 监控页面增删chat
+function checkChatButton() {
+    let stChatButtonAll = window.parent.document.querySelectorAll('section[data-testid="stSidebar"] button[kind="secondary"]');
+    if (stChatButtonAll.length === 2) {
+        stChatButtonAll.forEach(stChatButton => {
+            stChatButton.addEventListener('click', function () {
+                clearTimeout(TIMEOUT_KEEP_SYNTHESIS_WORKING);
+            })
+
+        })
+    } else {
+        setTimeout(checkChatButton, 500);
+    }
+}
+
+checkChatButton()
 
 //// copy.js
 copyButton.addEventListener('click', () => {
