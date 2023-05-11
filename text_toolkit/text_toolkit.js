@@ -166,6 +166,7 @@ stopBtn.addEventListener("click", () => {
     synth.cancel();
     speechStatus = "stop"
     btnDisplay('inline-block');
+    clearTimeout(TIMEOUT_KEEP_SYNTHESIS_WORKING);
 });
 
 utterance.onend = function () {

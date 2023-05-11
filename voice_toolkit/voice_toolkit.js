@@ -219,6 +219,7 @@ toggleBtn.addEventListener('click', function () {
     let btnClassList = toggleBtn.querySelector('i').classList
     if (btnClassList.contains('fa-volume-high')) {
         synth.cancel()
+        clearTimeout(TIMEOUT_KEEP_SYNTHESIS_WORKING)
         btnClassList.add('fa-volume-xmark');
         btnClassList.remove('fa-volume-high');
         window.parent.autoPlay = false;
@@ -272,6 +273,9 @@ function SayOutLoud(text) {
             recordBtn.click()
         }
     };
+    utterance.onend = () => {
+        clearTimeout(TIMEOUT_KEEP_SYNTHESIS_WORKING);
+    }
     synth.speak(utterance);
 }
 
@@ -319,7 +323,6 @@ function skipCode(divElement, excludeSelector) {
 function CheckNewMessages() {
     let ResultElements = window.parent.document.querySelectorAll("div.content-div.assistant")
     if (ResultElements.length === preResultElementCount + 1) {
-        synth.cancel();
         showPlayBtn()
         preResultElementCount += 1;
         NEW_ELEMENT = ResultElements[ResultElements.length - 1]
@@ -358,8 +361,6 @@ function CheckNewMessages() {
 
     } else if (!errorElement && ((ResultElements.length === preResultElementCount + 1) || !NEW_ELEMENT || (NEW_ELEMENT.textContent !== currentText))) {
         KEEP_CheckNewMessages = setTimeout(CheckNewMessages, 500);
-    } else {
-        clearTimeout(TIMEOUT_KEEP_SYNTHESIS_WORKING);
     }
 }
 
@@ -388,6 +389,7 @@ function checkFormSubmit() {
 checkFormSubmit()
 
 function showPlayBtn() {
+    synth.cancel();
     if (window.parent.textSound) {
         window.parent.textSound.forEach(value => {
             {
@@ -412,9 +414,9 @@ function checkChatRadioBlock() {
             // 监控到变化时的回调函数
             for (let mutation of mutationsList) {
                 if (mutation.type === 'attributes' && mutation.attributeName === 'tabindex') {
-                    synth.cancel();
                     showPlayBtn()
                     clearTimeout(KEEP_CheckNewMessages)
+                    clearTimeout(TIMEOUT_KEEP_SYNTHESIS_WORKING);
                 }
             }
         });
@@ -433,9 +435,9 @@ function checkChatButton() {
     if (stChatButtonAll.length === 2) {
         stChatButtonAll.forEach(stChatButton => {
             stChatButton.addEventListener('click', function () {
-                synth.cancel();
                 showPlayBtn()
                 clearTimeout(KEEP_CheckNewMessages)
+                clearTimeout(TIMEOUT_KEEP_SYNTHESIS_WORKING);
             })
 
         })
