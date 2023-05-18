@@ -351,6 +351,10 @@ if st.session_state['user_input_content'] != '':
         try:
             if apikey := st.session_state['apikey_input']:
                 openai.api_key = apikey
+            # 配置临时apikey，此时不会留存聊天记录，适合公开使用
+            elif "apikey_tem" in st.secrets:
+                openai.api_key = st.secrets["apikey_tem"]
+            # 注：当st.secrets中配置apikey后将会留存聊天记录，即使未使用此apikey
             else:
                 openai.api_key = st.secrets["apikey"]
             r = openai.ChatCompletion.create(model=st.session_state["select_model"], messages=history_need_input,
