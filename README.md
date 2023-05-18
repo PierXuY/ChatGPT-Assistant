@@ -9,6 +9,7 @@
 ## 🤩 [已部署项目](https://pearxuy-gpt.streamlit.app/)
 - 直接使用已部署项目，可在网页的设置选项中配置Openai Key，此时不会留存历史对话，仅在用户当前会话有效，他人不会共享。
 - 自行部署项目，在Secrets中配置Openai Key后，将留存历史对话记录，此时需设置为私人应用，打造为个人GPT助理。   
+
 **感谢由[@echoopen](https://github.com/echoopen)提供的临时key，目前可免费使用已部署项目（随时可能失效）**
 ### 使用技巧：
 - 双击页面可直接定位输入栏
