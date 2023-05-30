@@ -131,3 +131,4 @@ dmypy.json
 # self
 .streamlit/
 .idea/
+history_chats_file/
