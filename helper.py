@@ -106,7 +106,7 @@ def show_messages(current_chat: str, messages: list):
 def get_history_input(history: list, level: int) -> list:
     if level != 0:
         df_history = pd.DataFrame(history)
-        df_system = df_history.query('role=="system"')
+        df_system = df_history.query('role=="system" & content!=""')
         df_input = df_history.query('role!="system"')
         df_input = df_input[-level * 2:]
         res = pd.concat([df_system, df_input], ignore_index=True).to_dict('records')

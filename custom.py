@@ -15,7 +15,7 @@ user_background_color = ''
 gpt_background_color = 'rgba(225, 230, 235, 0.5)'
 # 模型初始设置
 initial_content_history = [{"role": 'system',
-                            "content": '当你的回复中涉及代码块时，请在markdown语法中标明语言类型。如果不涉及，请忽略这句话。'}]
+                            "content": ''}]
 initial_content_all = {"history": initial_content_history,
                        "paras": {
                            "temperature": 1.0,
