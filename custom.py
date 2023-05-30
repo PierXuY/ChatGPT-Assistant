@@ -13,7 +13,7 @@ gpt_svg = """
 # 内容背景
 user_background_color = ''
 gpt_background_color = 'rgba(225, 230, 235, 0.5)'
-# 模型初始设置
+# 模型初始设置  可设置全局prompt，为空字符时将会忽略
 initial_content_history = [{"role": 'system',
                             "content": ''}]
 initial_content_all = {"history": initial_content_history,
