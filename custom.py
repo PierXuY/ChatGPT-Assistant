@@ -13,21 +13,21 @@ gpt_svg = """
 # 内容背景
 user_background_color = ''
 gpt_background_color = 'rgba(225, 230, 235, 0.5)'
-# 模型初始设置  可设置全局prompt，为空字符时将会忽略
-initial_content_history = [{"role": 'system',
-                            "content": ''}]
-initial_content_all = {"history": initial_content_history,
-                       "paras": {
-                           "temperature": 1.0,
-                           "top_p": 1.0,
-                           "presence_penalty": 0.0,
-                           "frequency_penalty": 0.0,
-                       },
-                       "contexts": {
-                           'context_select': '不设置',
-                           'context_input': '',
-                           'context_level': 4
-                       }}
+# 模型初始设置
+initial_content_all = {
+    "history": [],
+    "paras": {
+        "temperature": 1.0,
+        "top_p": 1.0,
+        "presence_penalty": 0.0,
+        "frequency_penalty": 0.0,
+    },
+    "contexts": {
+        'context_select': '不设置',
+        'context_input': '',
+        'context_level': 4
+    }
+}
 # 上下文
 set_context_all = {"不设置": ""}
 set_context_all.update(set_context)

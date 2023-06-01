@@ -146,7 +146,8 @@ container_show_messages = st.container()
 container_show_messages.write("")
 # 对话展示
 with container_show_messages:
-    show_messages(current_chat, st.session_state["history" + current_chat])
+    if st.session_state["history" + current_chat]:
+        show_messages(current_chat, st.session_state["history" + current_chat])
 
 # 核查是否有对话需要删除
 if any(st.session_state['delete_dict'].values()):
@@ -175,7 +176,7 @@ def callback_fun(arg):
 
 
 def clear_button_callback():
-    st.session_state['history' + current_chat] = copy.deepcopy(initial_content_history)
+    st.session_state['history' + current_chat] = []
     write_data()
 
 
