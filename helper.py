@@ -104,7 +104,7 @@ def show_messages(current_chat: str, messages: list):
 
 # 根据context_level提取history
 def get_history_input(history: list, level: int) -> list:
-    if level != 0:
+    if level != 0 and history:
         df_input = pd.DataFrame(history).query('role!="system"')
         df_input = df_input[-level * 2:]
         res = df_input.to_dict('records')
