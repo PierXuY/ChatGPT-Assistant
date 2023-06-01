@@ -288,7 +288,7 @@ with tap_input:
             # 修改窗口名称
             user_input_content = st.session_state['user_input_area']
             df_history = pd.DataFrame(st.session_state["history" + current_chat])
-            if (not df_history.empty) and (len(df_history.query('role!="system"')) == 0):
+            if df_history.empty or len(df_history.query('role!="system"')) == 0:
                 new_name = extract_chars(user_input_content, 18)
                 reset_chat_name_fun(new_name)
 
