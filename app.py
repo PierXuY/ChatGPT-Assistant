@@ -371,7 +371,7 @@ if st.session_state['user_input_content'] != '':
         except openai.error.InvalidRequestError as e:
             area_error.error("无效的请求，请重试。报错：   \n" + str(e.args[0]))
         except openai.error.RateLimitError as e:
-            area_error.error("请求速率过快，请重试。报错：   \n" + str(e.args[0]))
+            area_error.error("请求受限。报错：   \n" + str(e.args[0]))
         else:
             st.session_state["chat_of_r"] = current_chat
             st.session_state["r"] = r
