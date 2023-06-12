@@ -87,14 +87,14 @@ def show_messages(messages: list):
 
 # 根据context_level提取history
 def get_history_input(history: list, level: int) -> list:
+    df_history = pd.DataFrame(history)
+    df_system = df_history.query('role=="system"')
     if level != 0:
-        df_history = pd.DataFrame(history)
-        df_system = df_history.query('role=="system"')
         df_input = df_history.query('role!="system"')
         df_input = df_input[-level * 2:]
         res = pd.concat([df_system, df_input], ignore_index=True).to_dict('records')
     else:
-        res = []
+        res = df_system.to_dict('records')
     return res
 
 
