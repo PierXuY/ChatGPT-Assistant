@@ -224,6 +224,9 @@ with tap_model:
     st.text_input("OpenAI API Key (可选)", type='password', key='apikey_input', label_visibility='collapsed')
     st.caption(
         "此Key仅在当前网页有效，且优先级高于Secrets中的配置，仅自己可用，他人无法共享。[官网获取](https://platform.openai.com/account/api-keys)")
+    st.markdown("OpenAI Base (可选)")
+    st.text_input("OpenAI Base (可选)", key='apiBase_input', label_visibility='collapsed')
+    st.caption("此Base设置参考 https://github.com/beidongjiedeguang/openai-forward")
 
     st.markdown("包含对话次数：")
     st.slider(
@@ -358,6 +361,14 @@ if st.session_state['user_input_content'] != '':
             # 注：当st.secrets中配置apikey后将会留存聊天记录，即使未使用此apikey
             else:
                 openai.api_key = st.secrets["apikey"]
+            if apiBase := st.session_state['apiBase_input']:
+                openai.api_base = apiBase
+            # 配置临时apiBase，此时不会留存聊天记录，适合公开使用
+            elif "apiBase_tem" in st.secrets:
+                openai.api_base = st.secrets["apiBase_tem"]
+            # 注：当st.secrets中配置apikey后将会留存聊天记录，即使未使用此apikey
+            else:
+                openai.api_base = st.secrets["apiBase"]
             r = openai.ChatCompletion.create(model=st.session_state["select_model"], messages=history_need_input,
                                              stream=True,
                                              **paras_need_input)
