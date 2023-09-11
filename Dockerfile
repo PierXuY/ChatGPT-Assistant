@@ -4,8 +4,8 @@ WORKDIR /opt/chatgpt-ai
 
 ADD ./ ./
 
-ENV OPENAI_API_KEY=sk-XXXXXXXXX
-ENV OPENAI_API_BASE=https://openaiproxy.xxx.com/v1
+# ENV OPENAI_API_KEY=sk-XXXXXXXXX
+# ENV OPENAI_API_BASE=https://api.openai.com/v1
 
 RUN pip install --no-cache-dir --upgrade -r requirements.txt --timeout 1000
 
