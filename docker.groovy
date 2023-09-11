@@ -15,7 +15,7 @@ node {
     }
     stage('dockerFile') {
         sh 'rm -rf code && mkdir code'
-        sh 'cp ./*.py ./code && cp Dockerfile ./code && cp requirements.txt ./code'
+        sh 'cp *.py ./code && cp Dockerfile ./code && cp requirements.txt ./code && cp *.sh ./code'
         sh 'cp -r ./text_toolkit ./voice_toolkit ./.streamlit ./code'
         dir('code'){
             stash 'code'
