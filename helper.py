@@ -12,8 +12,7 @@ from text_toolkit import text_toolkit
 
 def get_history_chats(path: str) -> list:
     if "apikey" in st.secrets:
-        if not os.path.exists(path):
-            os.makedirs(path)
+        os.makedirs(path, exist_ok=True)
         files = [f for f in os.listdir(f'./{path}') if f.endswith('.json')]
         files_with_time = [(f, os.stat(f'./{path}/' + f).st_ctime) for f in files]
         sorted_files = sorted(files_with_time, key=lambda x: x[1], reverse=True)
