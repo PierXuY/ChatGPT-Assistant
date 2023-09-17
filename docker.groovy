@@ -11,12 +11,12 @@ def version = "${params.version}"
 node {
     stage('git chekout') {
         git branch: 'main',
-                url: 'https://github.com/fastjrun-ml/ChatGPT-Assistant.git'
+                url: 'https://github.com/PierXuY/ChatGPT-Assistant.git'
     }
     stage('dockerFile') {
         sh 'rm -rf code && mkdir code'
         sh 'cp *.py ./code && cp Dockerfile ./code && cp requirements.txt ./code && cp *.sh ./code'
-        sh 'cp -r ./text_toolkit ./voice_toolkit ./.streamlit ./code'
+        sh 'cp -r ./libs ./text_toolkit ./voice_toolkit ./.streamlit ./code'
         dir('code'){
             stash 'code'
         }

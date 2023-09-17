@@ -1,4 +1,4 @@
-from set_context import set_context
+from .set_context import set_context
 
 # 用户名
 user_name = 'User'
