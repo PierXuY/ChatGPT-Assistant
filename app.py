@@ -157,8 +157,8 @@ with st.sidebar:
     st.write("\n")
     st.caption(
         """
-    - 双击页面可直接定位输入栏
-    - Ctrl + Enter 可快捷提交问题
+    - 双击页面直接定位输入栏
+    - Ctrl + Enter 快捷提交问题
     """
     )
     st.markdown(
