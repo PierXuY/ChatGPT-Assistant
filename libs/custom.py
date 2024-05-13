@@ -230,5 +230,8 @@ function checkElements() {
 }
 
 checkElements()
+
+// 向Tauri端发送信号
+window.__TAURI__.event.emit("ready")
 </script>
 """
