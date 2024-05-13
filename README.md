@@ -54,6 +54,12 @@ pip install -r requirements.txt
 streamlit run app.py
 ```
 
+## 桌面应用
+基于项目[package-url](https://github.com/PierXuY/package-url)打包，目前仅支持Windows系统。   
+- 下载Releases中的exe程序并点击安装
+- 安装完成后打开即可使用，默认指向的是已部署示例项目
+- 打开config文件夹中的conf.json文件，修改url即可指向个人的已部署项目，首次打开需要进行登录，速度较慢
+
 # 说明
 - 在[custom.py](https://github.com/PierXuY/ChatGPT-Assistant/blob/main/libs/custom.py)文件中可自定义用户名和SVG格式头像[(来源)](https://www.dicebear.com/playground?style=identicon)。
 - 在部署的项目源码中编辑[set_context.py](https://github.com/PierXuY/ChatGPT-Assistant/blob/main/libs/set_context.py)，即可增加预设定的上下文选项，会自动同步到应用中。
