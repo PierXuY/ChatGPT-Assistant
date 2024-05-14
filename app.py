@@ -14,7 +14,11 @@ if "apibase" in st.secrets:
 else:
     openai.api_base = "https://api.openai.com/v1"
 
-st.set_page_config(page_title="ChatGPT Assistant", layout="wide", page_icon="🤖")
+st.set_page_config(
+    page_title="ChatGPT Assistant",
+    layout="wide",
+    page_icon=LOGO,
+)
 # 自定义元素样式
 st.markdown(css_code, unsafe_allow_html=True)
 
@@ -40,7 +44,16 @@ if "initial_settings" not in st.session_state:
     st.session_state["initial_settings"] = True
 
 with st.sidebar:
-    st.markdown("# 🤖 聊天窗口")
+    icon_text = f"""
+    <div class="icon-text-container">
+        <img src='data:image/png;base64,{ICON_base64}' alt='icon'>
+        <span style='font-size: 24px;'>聊天窗口</span>
+    </div>
+    """
+    st.markdown(
+        icon_text,
+        unsafe_allow_html=True,
+    )
     # 创建容器的目的是配合自定义组件的监听操作
     chat_container = st.container()
     with chat_container:
@@ -131,14 +144,14 @@ with st.sidebar:
     )
     if create_chat_button:
         create_chat_fun()
-        st.experimental_rerun()
+        st.rerun()
 
     delete_chat_button = c2.button(
         "删除", use_container_width=True, key="delete_chat_button"
     )
     if delete_chat_button:
         delete_chat_fun()
-        st.experimental_rerun()
+        st.rerun()
 
 with st.sidebar:
     if ("set_chat_name" in st.session_state) and st.session_state[
@@ -146,7 +159,7 @@ with st.sidebar:
     ] != "":
         reset_chat_name_fun(st.session_state["set_chat_name"])
         st.session_state["set_chat_name"] = ""
-        st.experimental_rerun()
+        st.rerun()
 
     st.write("\n")
     st.write("\n")
@@ -213,7 +226,7 @@ if any(st.session_state["delete_dict"].values()):
                 "records"
             )
             write_data()
-            st.experimental_rerun()
+            st.rerun()
 
 
 def callback_fun(arg):
@@ -373,7 +386,9 @@ with tap_model:
 with tab_func:
     c1, c2, c3 = st.columns(3)
     with c1:
-        st.button("清空聊天记录", use_container_width=True, on_click=clear_button_callback)
+        st.button(
+            "清空聊天记录", use_container_width=True, on_click=clear_button_callback
+        )
     with c2:
         btn = st.download_button(
             label="导出聊天记录",
@@ -384,7 +399,9 @@ with tab_func:
         )
     with c3:
         st.button(
-            "删除所有窗口", use_container_width=True, on_click=delete_all_chat_button_callback
+            "删除所有窗口",
+            use_container_width=True,
+            on_click=delete_all_chat_button_callback,
         )
 
     st.write("\n")
@@ -441,7 +458,7 @@ with tap_input:
     if submitted:
         st.session_state["user_input_content"] = user_input
         st.session_state["user_voice_value"] = ""
-        st.experimental_rerun()
+        st.rerun()
 
     if (
         "open_voice_toolkit_value" not in st.session_state
@@ -457,7 +474,7 @@ with tap_input:
             st.session_state["user_voice_value"] = vocie_result["voice_result"]["value"]
             if vocie_result["voice_result"]["flag"] == "final":
                 st.session_state["voice_flag"] = "final"
-                st.experimental_rerun()
+                st.rerun()
 
 
 def get_model_input():
@@ -530,7 +547,7 @@ if st.session_state["user_input_content"] != "":
         else:
             st.session_state["chat_of_r"] = current_chat
             st.session_state["r"] = r
-            st.experimental_rerun()
+            st.rerun()
 
 if ("r" in st.session_state) and (current_chat == st.session_state["chat_of_r"]):
     if current_chat + "report" not in st.session_state:
@@ -572,7 +589,7 @@ if ("r" in st.session_state) and (current_chat == st.session_state["chat_of_r"])
         st.session_state.pop(current_chat + "report")
     if "r" in st.session_state:
         st.session_state.pop("r")
-        st.experimental_rerun()
+        st.rerun()
 
 # 添加事件监听
 v1.html(js_code, height=0)
