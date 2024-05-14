@@ -14,10 +14,8 @@ gpt_svg = """
 """
 
 # LOGO
-Image.open("./libs/logo.png")
-LOGO = Image.open("./libs/logo.png")
-
 icon_path = "./libs/icon.ico"
+ICON = Image.open(icon_path)
 with open(icon_path, "rb") as img_file:
     ICON_base64 = base64.b64encode(img_file.read()).decode()
 

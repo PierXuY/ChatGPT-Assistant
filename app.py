@@ -17,7 +17,7 @@ else:
 st.set_page_config(
     page_title="ChatGPT Assistant",
     layout="wide",
-    page_icon=LOGO,
+    page_icon=ICON,
 )
 # 自定义元素样式
 st.markdown(css_code, unsafe_allow_html=True)
