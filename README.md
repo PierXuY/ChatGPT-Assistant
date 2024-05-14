@@ -56,7 +56,7 @@ streamlit run app.py
 
 ## 桌面应用
 基于项目[package-url](https://github.com/PierXuY/package-url)打包，目前仅支持Windows系统。   
-- 下载Releases中的exe程序并点击安装
+- 下载Releases中的程序并点击安装
 - 安装完成后打开即可使用，默认指向的是已部署示例项目
 - 打开config文件夹中的conf.json文件，修改url即可指向个人的已部署项目，首次打开需要进行登录，速度较慢
 
