@@ -291,7 +291,7 @@ with tap_context:
         st.session_state["context_select" + current_chat + "value"]
     )
     st.selectbox(
-        label="选择上下文",
+        label="选择提示语",
         options=set_context_list,
         key="context_select" + current_chat,
         index=context_select_index,
@@ -301,7 +301,7 @@ with tap_context:
     st.caption(set_context_all[st.session_state["context_select" + current_chat]])
 
     st.text_area(
-        label="补充或自定义上下文：",
+        label="补充或自定义提示语：",
         key="context_input" + current_chat,
         value=st.session_state["context_input" + current_chat + "value"],
         on_change=callback_fun,
