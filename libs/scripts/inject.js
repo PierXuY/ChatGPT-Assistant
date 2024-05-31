@@ -43,15 +43,15 @@ function checkElements() {
         //     textarea.style.borderColor = 'white';
         // });
 
-        // // Ctrl + Enter快捷方式
-        // window.parent.document.addEventListener("keydown", event => {
-        //     if (event.ctrlKey && event.key === "Enter") {
-        //         if (textinput.textContent !== '') {
-        //             button.click();
-        //         }
-        //         textinput.blur();
-        //     }
-        // });
+        // Ctrl + Enter快捷方式
+        window.parent.document.addEventListener("keydown", event => {
+            if (event.ctrlKey && event.key === "Enter") {
+                if (textinput.textContent !== '') {
+                    button.click();
+                }
+                textinput.blur();
+            }
+        });
 
         // 设置 Tab 键
         textinput.addEventListener('keydown', function (event) {
