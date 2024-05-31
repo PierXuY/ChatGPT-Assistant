@@ -40,6 +40,7 @@ git clone https://github.com/PierXuY/ChatGPT-Assistant.git
 3. 安装依赖
 ```bash
 pip install -r requirements.txt
+- 注：请勿使用streamlit==1.28.0版本，存在无限rerun的bug
 ```
 
 4. 设置API Key;设置API Base（可选）
