@@ -49,7 +49,7 @@ css_code = """
     }
     
     section.main > div {
-        padding-top: 20px;
+        padding-top: 10px;
     }
     
     .icon-text-container {
