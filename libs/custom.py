@@ -44,12 +44,18 @@ set_context_all.update(set_context)
 # 自定义css、js
 css_code = """
     <style>
+    div[data-testid="stSidebarUserContent"] {
+        position: absolute;
+        top: 16px;
+        z-index:-999;
+    }
+    
     section[data-testid="stSidebar"] > div > div:nth-child(2) {
         padding-top: 0.75rem !important;
     }
     
     section.main > div {
-        padding-top: 10px;
+        padding-top: 20px;
     }
     
     .icon-text-container {
