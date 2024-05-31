@@ -43,13 +43,11 @@ set_context_all.update(set_context)
 
 # 自定义css、js
 import os
-
 current_dir = os.path.dirname(os.path.abspath(__file__))
 
 with open(f"{current_dir}/scripts/inject.css", "r", encoding="utf-8") as f:
     inject_css = f.read()
 css_code = f"<style>{inject_css}</style>"
-
 
 with open(f"{current_dir}/scripts/inject.js", "r", encoding="utf-8") as f:
     inject_js = f.read()
