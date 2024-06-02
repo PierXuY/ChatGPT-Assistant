@@ -170,7 +170,7 @@ with st.sidebar:
     st.write("\n")
     st.caption(
         """
-    - 双击或/键可定位输入栏
+    - 双击或按/键可定位输入栏
     - Ctrl + Enter 快捷提交问题
     """
     )
