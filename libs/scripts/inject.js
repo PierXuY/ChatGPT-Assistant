@@ -29,6 +29,36 @@ function checkElements() {
                 waitForFocus();
             }
         });
+
+        // 按下/键时定位输入框
+        window.parent.document.addEventListener('keydown', function (event) {
+            if (event.key === '/') {
+                // 没有聚焦在'INPUT', 'TEXTAREA'或者不存在activeElement
+                if (!window.parent.document.activeElement || !['INPUT', 'TEXTAREA'].includes(window.parent.document.activeElement.tagName.toUpperCase())) {
+                    let activeTab = tabs_div.querySelector('button[aria-selected="true"]');
+                    if (activeTab.querySelector('p').textContent === '💬 聊天') {
+                        event.preventDefault(); 
+                        textinput.focus();
+                    } else {
+                        tabs[0].click();
+                        const waitMs = 50;
+
+                        function waitForFocus() {
+                            if (window.parent.document.activeElement === textinput) {
+                            } else {
+                                setTimeout(function () {
+                                    textinput.focus();
+                                    waitForFocus();
+                                }, waitMs);
+                            }
+                        }
+
+                        waitForFocus();
+                    }
+                }
+            }
+        });
+
         window.parent.document.addEventListener('mousedown', (event) => {
             if (event.detail === 2) {
                 event.preventDefault();
