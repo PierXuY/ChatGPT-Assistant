@@ -315,7 +315,7 @@ with tap_model:
         label_visibility="collapsed",
     )
     st.caption(
-        "此Key仅在当前网页有效，且优先级高于Secrets中的配置，仅自己可用，他人无法共享。[官网获取](https://platform.openai.com/account/api-keys)"
+        "此Key仅在当前网页有效，优先级高于Secrets中的配置。[官网获取](https://platform.openai.com/account/api-keys)"
     )
 
     st.slider(
