@@ -12,6 +12,11 @@ body {
     height: 21px;
 }
 
+.main {
+    display: inline-block;
+    margin-right: auto;
+}
+
 .main::before {
     content: attr(aria-label);
     position: absolute;
