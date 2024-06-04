@@ -462,3 +462,8 @@ checkChatButton()
 window.addEventListener("DOMContentLoaded", function () {
     setFrameHeight(120)
 });
+
+// 监控双击事件
+document.body.addEventListener("dblclick", function () {
+    window.parent.document.dispatchEvent(new Event('dblclick'));
+});
