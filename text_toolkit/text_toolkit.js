@@ -266,3 +266,8 @@ deleteButton.addEventListener('click', () => {
 window.addEventListener("DOMContentLoaded", function () {
     setFrameHeight(21)
 });
+
+// 监控双击事件
+document.body.addEventListener("dblclick", function () {
+    window.parent.document.dispatchEvent(new Event('dblclick'));
+});
