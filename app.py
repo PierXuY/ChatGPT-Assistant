@@ -588,6 +588,6 @@ if ("r" in st.session_state) and (current_chat == st.session_state["chat_of_r"])
     if "r" in st.session_state:
         st.session_state.pop("r")
         st.rerun()
-
+        
 # 添加事件监听
 v1.html(js_code, height=0)
